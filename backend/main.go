@@ -245,15 +245,6 @@ func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responseFromGPT, err := sendRequestToGPT(input)
-	re := regexp.MustCompile(`\[(.*?)\]`)
-
-	matches := re.FindAllStringSubmatch(responseFromGPT.Choices[0].Message.Content, -1)
-
-	var response Response
-
-	response.Advice = matches[0][1]
-	response.ImprovedPress = matches[1][1]
-
 	if err != nil {
 		http.Error(w, fmt.Sprintf("GPTリクエスト失敗: %v", err), http.StatusInternalServerError)
 		return
@@ -298,6 +289,10 @@ func isRequestOK(r *http.Request) (bool, string) {
 	r.Body = io.NopCloser(&buf)
 
 	releaseTypeMap := getReleaseTypeMap()
+	if input.Text == "" {
+		return false, "テキストは入力必須です"
+	}
+
 	if _, ok := releaseTypeMap[input.ReleaseTypeId]; !ok {
 		return false, "release_type_id: 不正な値指定です"
 	}
