@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import type { ReviewCustomizeOption } from '@/pages/AppRoot/types';
-  import { computed } from 'vue';
+  import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
+  import { computed } from "vue";
 
   defineProps<{
     options: ReviewCustomizeOption,

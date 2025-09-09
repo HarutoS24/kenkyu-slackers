@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import axios, { AxiosError } from 'axios'
-import { ref } from 'vue';
+import axios, { AxiosError } from "axios";
+import { ref } from "vue";
 
   const hoge = () => {
     window.alert("Hoge!");

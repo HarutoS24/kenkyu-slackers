@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import ModalWindow from '@/components/ModalWindow.vue';
-  import { getIndustryIds } from '@/pages/AppRoot/api-call';
-  import OptionSelector from '@/pages/AppRoot/OptionSelector.vue';
-  import type { ReviewCustomizeOption } from '@/pages/AppRoot/types';
-  import { onMounted, ref, watch } from 'vue';
+  import ModalWindow from "@/components/ModalWindow.vue";
+  import { getIndustryIds } from "@/pages/AppRoot/api-call";
+  import OptionSelector from "@/pages/AppRoot/OptionSelector.vue";
+  import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
+  import { onMounted, ref, watch } from "vue";
 
   const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
     return {
