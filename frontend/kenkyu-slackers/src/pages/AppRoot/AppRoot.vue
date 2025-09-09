@@ -40,6 +40,18 @@
 
   const resultSuggestion = ref("");
   const resultAdvice = ref("");
+
+  const onSubmit = async () => {
+    const res = await getAxios().post("/get_feedback_from_GPT", {});
+    if (res.status === 200) {
+      const data = res.data;
+      resultSuggestion.value = data.improved_press;
+      resultAdvice.value = data.Advice;
+    }
+    else {
+      throw new Error(`The API response was invalid (status ${res.status}).`);
+    }
+  }
 </script>
 
 <template>
@@ -68,7 +80,7 @@
         </el-col>
       </el-row>
       <el-form-item>
-        <el-button type="primary">
+        <el-button type="primary" @click="onSubmit">
           送信
         </el-button>
       </el-form-item>
