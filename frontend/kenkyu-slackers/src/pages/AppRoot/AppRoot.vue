@@ -24,8 +24,8 @@
 
   const hogeOptions = ref<ReviewCustomizeOption>({});
   const fugaOptions = ref<ReviewCustomizeOption>({});
-  const hogeValue = ref("");
-  const fugaValue = ref("");
+  const hogeValues = ref([]);
+  const fugaValues = ref([]);
   const markdownContent = ref("");
   onMounted(() => {
     hogeOptions.value = getOptions("hoge");
@@ -40,10 +40,10 @@
   <div class="container">
     <el-form>
       <el-form-item label="選択肢1">
-        <option-selector :value="hogeValue" :options="hogeOptions" />
+        <option-selector :values="hogeValues" :options="hogeOptions" type="select" />
       </el-form-item>
       <el-form-item label="選択肢2">
-        <option-selector :value="fugaValue" :options="fugaOptions" />
+        <option-selector :values="fugaValues" :options="fugaOptions" type="checkbox" />
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="12">
