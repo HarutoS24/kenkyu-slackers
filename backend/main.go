@@ -342,7 +342,7 @@ func generateReplacedText(path string, vars map[string]interface{}) (string, err
 			case []string:
 				var aspectsStr = "\n"
 				for _, s := range v {
-					if name, ok := aspectMap[s]; ok {
+					if name, ok := aspectMapDetail[s]; ok {
 						aspectsStr += fmt.Sprintf("・%s\n", name)
 					} else {
 						aspectsStr += fmt.Sprintf("・%s\n", s)
