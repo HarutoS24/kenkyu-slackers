@@ -119,34 +119,75 @@ func respondJSON(w http.ResponseWriter, data interface{}) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+func getReleaseTypeMap() map[string]string {
+	releaseTypes, err := getReleaseTypesFromDB()
 	if err != nil {
-		panic(err)
+		fmt.Printf("getReleaseTypesFromDBエラー: %v\n", err)
+		return map[string]string{}
 	}
+
+	releaseTypeMap := make(map[string]string)
+	for _, rel := range releaseTypes {
+		releaseTypeMap[fmt.Sprintf("%d", rel.ReleaseTypeId)] = rel.ReleaseTypeName
+	}
+	return releaseTypeMap
+}
+
+func getReleaseTypesFromDB() ([]ReleaseType, error) {
+	file, err := os.Open("assets/SQL/get_release_type_table.txt")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var sqlQuery string
 	scanner := bufio.NewScanner(file)
-
 	for scanner.Scan() {
-		line := scanner.Text()
-		sqlQuery += line + " "
+		sqlQuery += strings.TrimSpace(scanner.Text()) + " "
 	}
-
-	fmt.Fprintln(os.Stdout, sqlQuery)
 
 	rows, err := db.Query(sqlQuery)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-
 	defer rows.Close()
 
-	industryMap := make(IndustryMap)
+	var releaseTypes []ReleaseType
 	for rows.Next() {
-		var industry Industry
-		if err := rows.Scan(&industry.IndustryId, &industry.IndustryName); err != nil {
-			panic(err)
+		var rel ReleaseType
+		if err := rows.Scan(&rel.ReleaseTypeId, &rel.ReleaseTypeName); err != nil {
+			return nil, err
 		}
-		industryMap[industry.IndustryId] = industry.IndustryName
+		releaseTypes = append(releaseTypes, rel)
 	}
-	return industryMap
+	return releaseTypes, nil
+}
+
+func getPopularPressesFromDB(releaseTypeId string) ([]Press, error) {
+	vars := map[string]interface{}{
+		"release_type_id_int": releaseTypeId,
+	}
+	sqlQuery, err := generateReplacedText("assets/SQL/get_popular_presses.txt", vars)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(sqlQuery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var presses []Press
+	for rows.Next() {
+		var press Press
+		if err := rows.Scan(&press.Body); err != nil {
+			return nil, err
+		}
+		presses = append(presses, press)
+	}
+	return presses, nil
 }
 
 // 指定可能な業種とそのid
