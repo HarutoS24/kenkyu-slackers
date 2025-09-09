@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 type Input struct {
@@ -41,6 +42,13 @@ type ResponseFromGPT struct {
 type Choices struct {
 	Message Message `json:"message"`
 }
+
+type Industry struct {
+	IndustryId   int    `json:"industry_id"`
+	IndustryName string `json:"industry_name"`
+}
+
+type IndustryMap = map[int]string
 
 const model_name = "gpt-4.1-nano"
 
@@ -84,13 +92,43 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+func getIndustryMap() IndustryMap {
+	var sqlQuery string
+
+	file, err := os.Open("assets/SQL/get_industry_table.txt")
+	if err != nil {
+		panic(err)
+	}
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		sqlQuery += line + " "
+	}
+
+	fmt.Fprintln(os.Stdout, sqlQuery)
+
+	rows, err := db.Query(sqlQuery)
+	if err != nil {
+		panic(err)
+	}
+
+	defer rows.Close()
+
+	industryMap := make(IndustryMap)
+	for rows.Next() {
+		var industry Industry
+		if err := rows.Scan(&industry.IndustryId, &industry.IndustryName); err != nil {
+			panic(err)
+		}
+		industryMap[industry.IndustryId] = industry.IndustryName
+	}
+	return industryMap
+}
+
 // 指定可能な業種とそのid
 func getIndustryIDs(w http.ResponseWriter, r *http.Request) {
-	industryMap := map[string]string{
-		"0": "その他",
-		"1": "水産・農林業",
-		"2": "鉱業",
-	}
+	industryMap := getIndustryMap()
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	if err := json.NewEncoder(w).Encode(industryMap); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
