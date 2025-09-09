@@ -8,8 +8,6 @@ on:
       - 'backend/**'
 
 env:
-  AWS_REGION: ap-northeast-1
-  AWS_ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/oidc-test-role #Ownerに環境変数を設定してもらう
   AWS_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }} #Ownerに環境変数を設定してもらう
 jobs:
   ec2-access-test:
