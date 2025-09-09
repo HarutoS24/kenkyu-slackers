@@ -76,7 +76,6 @@
 
 <style scoped>
   .container {
-    padding: 0 8vw;
     scrollbar-color: #ccc #fff;
   }
 

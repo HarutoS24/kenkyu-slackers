@@ -9,7 +9,9 @@
       </div>
     </el-header>
     <el-main>
-      <router-view />
+      <div class="layout-main-container">
+        <router-view />
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -31,5 +33,9 @@
     padding: 0 10vw;
     width: 80vw;
     height: 100%;
+  }
+
+  .layout-main-container {
+    padding: 0 8vw;
   }
 </style>
