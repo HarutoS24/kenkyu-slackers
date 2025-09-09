@@ -403,7 +403,6 @@ func main() {
 	http.Handle("/get_feedback_from_GPT", corsMiddleware(http.HandlerFunc(returnFeedbackFromGPT)))
 	http.Handle("/popular_presses", corsMiddleware(http.HandlerFunc(returnPopularPresses)))
 	http.Handle("/check", corsMiddleware(http.HandlerFunc(checkApiRequest)))
-	http.HandleFunc("/test", test)
 
 	fmt.Println("Server running on :8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
@@ -412,4 +411,5 @@ func main() {
 	}
 }
 
-}
+
+
