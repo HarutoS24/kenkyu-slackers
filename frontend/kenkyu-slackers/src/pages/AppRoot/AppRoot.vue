@@ -1,54 +1,67 @@
 <script setup lang="ts">
   import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
   import OptionSelector from "./OptionSelector.vue"
-  import { onMounted, ref } from "vue";
+  import { onMounted, ref, useTemplateRef } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
+  import { getFeedbackFromGPT, getIndustryIds } from "@/pages/AppRoot/api-call";
 
-  const getOptions = (optionType: string): ReviewCustomizeOption => {
-    // TODO: 本番実装置き換え
-    return {
-      1: {
-        value: `${optionType}-value1`,
-        label: `${optionType}-label1`,
-      },
-      2: {
-        value: `${optionType}-value2`,
-        label: `${optionType}-label2`,
-      },
-      3: {
-        value: `${optionType}-value3`,
-        label: `${optionType}-label3`,
-      },
+  const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
+    if (optionName === "industry") {
+      const rawData = Object.entries(await getIndustryIds());
+      const data: ReviewCustomizeOption = Object.fromEntries(
+        rawData.map(e => [e[0], { value: e[0], label: e[1] as string }])
+      );
+      return data;
+    }
+    else {
+      throw new Error(`Specified option name ${optionName} is not valid.`);
     }
   }
 
-  const hogeOptions = ref<ReviewCustomizeOption>({});
+  const mdEditorRef = useTemplateRef("md-editor");
+  const getMdValue = () => {
+    const mdEditor = mdEditorRef.value;
+    if (mdEditor !== null) {
+      return mdEditor.getValue();
+    }
+    else {
+      return "";
+    }
+  }
+
+  const industryOptions = ref<ReviewCustomizeOption>({});
   const fugaOptions = ref<ReviewCustomizeOption>({});
-  const hogeValues = ref([]);
-  const fugaValues = ref([]);
-  const markdownContent = ref("");
-  onMounted(() => {
-    hogeOptions.value = getOptions("hoge");
-    fugaOptions.value = getOptions("fuga");
+  const industryValue = ref([]);
+  const fugaValue = ref([]);
+  onMounted(async () => {
+    industryOptions.value = await getOptions("industry");
+    fugaOptions.value = await getOptions("industry");
   })
 
   const resultSuggestion = ref("");
   const resultAdvice = ref("");
+
+  const onSubmit = async () => {
+    console.log(getMdValue());
+    const data = await getFeedbackFromGPT();
+    resultSuggestion.value = data.improved_press;
+    resultAdvice.value = data.Advice;
+  }
 </script>
 
 <template>
   <div class="container">
     <el-form>
-      <el-form-item label="選択肢1">
-        <option-selector :values="hogeValues" :options="hogeOptions" type="select" />
+      <el-form-item label="業種">
+        <option-selector :values="industryValue" :options="industryOptions" type="select" />
       </el-form-item>
       <el-form-item label="選択肢2">
-        <option-selector :values="fugaValues" :options="fugaOptions" type="checkbox" />
+        <option-selector :values="fugaValue" :options="fugaOptions" type="checkbox" />
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="本文（マークダウン）" label-position="top">
-            <markdown-editor :value="markdownContent" />
+            <markdown-editor ref="md-editor" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -62,7 +75,7 @@
         </el-col>
       </el-row>
       <el-form-item>
-        <el-button type="primary">
+        <el-button type="primary" @click="onSubmit">
           送信
         </el-button>
       </el-form-item>

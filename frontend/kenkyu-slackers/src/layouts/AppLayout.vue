@@ -4,7 +4,9 @@
 <template>
   <el-container>
     <el-header>
-      header
+      <div class="header">
+        プレスリリース レビュワー
+      </div>
     </el-header>
     <el-main>
       <router-view />
@@ -12,4 +14,22 @@
   </el-container>
 </template>
 
-<style scoped></style>
+<style scoped>
+  :deep(.el-header) {
+    padding: 0;
+  }
+
+  .header {
+    background-color: #335;
+    align-content: center;
+    user-select: none;
+
+    color: #bbc;
+    font-weight: 600;
+
+    margin: 0;
+    padding: 0 10vw;
+    width: 100%;
+    height: 100%;
+  }
+</style>
