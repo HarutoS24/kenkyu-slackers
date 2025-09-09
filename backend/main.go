@@ -241,6 +241,19 @@ func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("GPTリクエスト失敗: %v", err), http.StatusInternalServerError)
 		return
 	}
+	re := regexp.MustCompile(`(?s)\$\[(.*?)\]\$`)
+
+	matches := re.FindAllStringSubmatch(responseFromGPT.Choices[0].Message.Content, -1)
+
+	fmt.Println(responseFromGPT.Choices[0].Message.Content)
+	var response Response
+
+	markdown, err := md.ConvertString(matches[1][1])
+	if err != nil {
+		http.Error(w, "md形式のテキストの生成に失敗しました", http.StatusInternalServerError)
+	}
+	response.Advice = matches[0][1]
+	response.ImprovedPress = markdown
 
 	respondJSON(w, response)
 }
