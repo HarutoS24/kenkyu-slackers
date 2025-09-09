@@ -190,14 +190,26 @@ func getPopularPressesFromDB(releaseTypeId string) ([]Press, error) {
 	return presses, nil
 }
 
-// 指定可能な業種とそのid
-func getIndustryIDs(w http.ResponseWriter, r *http.Request) {
-	industryMap := getIndustryMap()
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	if err := json.NewEncoder(w).Encode(industryMap); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+// ----- Handlers -----
+func returnReleaseTypeMap(w http.ResponseWriter, r *http.Request) {
+	respondJSON(w, getReleaseTypeMap())
+}
+
+func returnAspectMap(w http.ResponseWriter, r *http.Request) {
+	respondJSON(w, aspectMap)
+}
+
+func returnPopularPresses(w http.ResponseWriter, r *http.Request) {
+	if ok, str := isRequestOK(r); !ok {
+		http.Error(w, str, http.StatusBadRequest)
 		return
 	}
+	presses, err := getPopularPressesFromDB("2")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("DBアクセスに失敗しました: %s", err), http.StatusInternalServerError)
+		return
+	}
+	respondJSON(w, presses)
 }
 
 func getFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
