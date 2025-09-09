@@ -3,25 +3,15 @@
   import OptionSelector from "./OptionSelector.vue"
   import { onMounted, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
-  import { getAxios } from "@/util/axios";
+  import { getFeedbackFromGPT, getIndustryIds } from "@/pages/AppRoot/api-call";
 
   const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
-    const endpointMap = new Map([
-      ["industry", "/industry_ids"]
-    ])
-
-    if (endpointMap.has(optionName)) {
-      const res = await getAxios().get(endpointMap.get(optionName)!);
-      if (res.status === 200) {
-        const rawData = Object.entries(res.data);
-        const data: ReviewCustomizeOption = Object.fromEntries(
-          rawData.map(e => [e[0], { value: e[0], label: e[1] as string }])
-        );
-        return data;
-      }
-      else {
-        throw new Error(`The API response was invalid (status ${res.status}).`);
-      }
+    if (optionName === "industry") {
+      const rawData = Object.entries(await getIndustryIds());
+      const data: ReviewCustomizeOption = Object.fromEntries(
+        rawData.map(e => [e[0], { value: e[0], label: e[1] as string }])
+      );
+      return data;
     }
     else {
       throw new Error(`Specified option name ${optionName} is not valid.`);
@@ -42,15 +32,9 @@
   const resultAdvice = ref("");
 
   const onSubmit = async () => {
-    const res = await getAxios().post("/get_feedback_from_GPT", {});
-    if (res.status === 200) {
-      const data = res.data;
-      resultSuggestion.value = data.improved_press;
-      resultAdvice.value = data.Advice;
-    }
-    else {
-      throw new Error(`The API response was invalid (status ${res.status}).`);
-    }
+    const data = await getFeedbackFromGPT();
+    resultSuggestion.value = data.improved_press;
+    resultAdvice.value = data.Advice;
   }
 </script>
 
