@@ -1,18 +1,21 @@
 <script setup lang="ts">
   import type { ReviewCustomizeOption } from '@/pages/AppRoot/types';
-  import { ref } from 'vue';
+  import { computed } from 'vue';
 
-  const { values } = defineProps<{
+  defineProps<{
     options: ReviewCustomizeOption,
-    values: string[],
     type: "select" | "checkbox",
   }>()
-  const valuesRef = ref(values);
+  const values = defineModel<string[]>({ required: true });
+  const singleValue = computed({
+    get: () => values.value[0],
+    set: (newValue) => values.value[0] = newValue,
+  });
 
 </script>
 
 <template>
-  <el-select v-model="valuesRef[0]" v-if="type === 'select'">
+  <el-select v-model="singleValue" v-if="type === 'select'">
     <el-option
       v-for="[key, {value, label}] of Object.entries(options)"
       :key
@@ -20,7 +23,7 @@
       :label
     />
   </el-select>
-  <el-checkbox-group v-model="valuesRef" v-if="type === 'checkbox'">
+  <el-checkbox-group v-model="values" v-if="type === 'checkbox'">
     <el-checkbox
       v-for="[key, {value, label}] of Object.entries(options)"
       :key

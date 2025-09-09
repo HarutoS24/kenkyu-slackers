@@ -44,10 +44,10 @@
   <div class="container">
     <el-form>
       <el-form-item label="業種">
-        <option-selector :values="industryValue" :options="industryOptions" type="select" />
+        <option-selector v-model="industryValue" :options="industryOptions" type="select" />
       </el-form-item>
       <el-form-item label="選択肢2">
-        <option-selector :values="fugaValue" :options="fugaOptions" type="checkbox" />
+        <option-selector v-model="fugaValue" :options="fugaOptions" type="checkbox" />
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="12">
