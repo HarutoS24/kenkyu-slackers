@@ -212,9 +212,36 @@ func returnPopularPresses(w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, presses)
 }
 
-func getFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
+func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
+	if ok, str := isRequestOK(r); !ok {
+		http.Error(w, str, http.StatusBadRequest)
+		return
+	}
+
 	var input Input
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		http.Error(w, "JSONデコードに失敗しました", http.StatusBadRequest)
+		return
+	}
+
+	responseFromGPT, err := sendRequestToGPT(input)
+	re := regexp.MustCompile(`\[(.*?)\]`)
+
+	matches := re.FindAllStringSubmatch(responseFromGPT.Choices[0].Message.Content, -1)
+
+	var response Response
+
+	response.Advice = matches[0][1]
+	response.ImprovedPress = matches[1][1]
+
+	if err != nil {
+		http.Error(w, fmt.Sprintf("GPTリクエスト失敗: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, response)
+}
+
 func checkApiRequest(w http.ResponseWriter, r *http.Request) {
 	if ok, msg := isRequestOK(r); !ok {
 		http.Error(w, msg, http.StatusBadRequest)
@@ -293,34 +320,59 @@ func sendRequestToGPT(input Input) ResponseFromGPT {
 		})
 		fullText += result + "\n"
 	}
-
-	fmt.Fprintln(os.Stdout, fullText)
-	fixedmsg := Message{Role: "system", Content: fullText}
-	msg := Message{Role: "user", Content: "こんにちは"}
-	req := RequestToGPT{
-		Model:    model_name,
-		Messages: []Message{fixedmsg, msg},
+// ----- GPT API -----
+func sendRequestToGPT(input Input) (ResponseFromGPT, error) {
+	releaseTypeMap := getReleaseTypeMap()
+	popularPresses, err := getPopularPressesFromDB(input.ReleaseTypeId)
+	if err != nil {
+		return ResponseFromGPT{}, err
 	}
-	jsonData, _ := json.Marshal(req)
-	httpreq, _ := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewReader(jsonData))
+	varsSystemPrompt := map[string]interface{}{
+		"release_type_id":   releaseTypeMap[input.ReleaseTypeId],
+		"important_aspects": input.ImportantAspects,
+		"popular_presses":   popularPresses,
+	}
+
+	fullText, err := generateReplacedText("assets/GPT/system_prompt.txt", varsSystemPrompt)
+	if err != nil {
+		return ResponseFromGPT{}, err
+	}
+
+	reqBody := RequestToGPT{
+		Model:    modelName,
+		Messages: []Message{{Role: "system", Content: fullText}, {Role: "user", Content: "私は以下のようなプレスリリースを書きました。このプレスリリースを改善することには私の人生がかかっています。\n" + input.Text}},
+	}
+
+	jsonData, err := json.Marshal(reqBody)
+	if err != nil {
+		return ResponseFromGPT{}, err
+	}
+
+	openaiKey := os.Getenv("OPENAPI_KEY")
+	if openaiKey == "" {
+		return ResponseFromGPT{}, fmt.Errorf("OPENAPI_KEY が設定されていません")
+	}
+
+	httpreq, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewReader(jsonData))
+	if err != nil {
+		return ResponseFromGPT{}, err
+	}
 	httpreq.Header.Set("Content-Type", "application/json")
-	openapi_key := os.Getenv("OPENAPI_KEY")
-	httpreq.Header.Set("Authorization", "Bearer "+openapi_key)
+	httpreq.Header.Set("Authorization", "Bearer "+openaiKey)
 
 	client := &http.Client{}
 	resp, err := client.Do(httpreq)
 	if err != nil {
-		panic(err)
+		return ResponseFromGPT{}, err
 	}
 	defer resp.Body.Close()
 
 	var response ResponseFromGPT
-
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		panic(err)
+		return ResponseFromGPT{}, err
 	}
 
-	return response
+	return response, nil
 }
 
 // Apiに対するリクエストについて、とりあえず構造とアクセス方法が正しければOK, ダメなら原因を表示する
