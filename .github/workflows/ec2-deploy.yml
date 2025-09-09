@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'backend/**'
+  workflow_dispatch:
 
 env:
   AWS_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }} #Ownerに環境変数を設定してもらう
