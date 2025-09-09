@@ -6,11 +6,14 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"strings"
 
+	md "github.com/JohannesKaufmann/html-to-markdown/v2"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
