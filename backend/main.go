@@ -11,8 +11,14 @@ type Input struct {
 	ImportantAspects []string `json:"important_aspects"`
 }
 
+type Response struct {
+	Advice        string
+	ImprovedPress string `json:"improved_press"`
+}
+
 func main() {
 	http.HandleFunc("/industry_ids", getIndustryIDs)
+	http.HandleFunc("/get_feedback_from_GPT", getFeedbackFromGPT)
 	http.HandleFunc("/check", checkApiRequest)
 	http.ListenAndServe(":8080", nil)
 }
@@ -31,19 +37,37 @@ func getIndustryIDs(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func getFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
+	if isOK, errStr := isRequestOK(r); !isOK {
+		fmt.Fprintln(w, errStr)
+		return
+	}
+	response := Response{"あなたのプレスリリースは以下の点で問題があります...", "#[業界初!!]..."}
+
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		panic(err)
+	}
+}
+
 // Apiに対するリクエストについて、とりあえず構造とアクセス方法が正しければOK, ダメなら原因を表示する
 func checkApiRequest(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		fmt.Fprintln(w, "POSTメソッドでアクセスしてください")
+	if isOK, errStr := isRequestOK(r); !isOK {
+		fmt.Fprintln(w, errStr)
 		return
+	}
+	fmt.Fprintln(os.Stdout, "OK")
+}
+
+// Apiに対するリクエストについて、とりあえず構造とアクセス方法が正しいかを判定
+func isRequestOK(r *http.Request) (bool, string) {
+	if r.Method != http.MethodPost {
+		return false, "POSTメソッドでアクセスしてください"
 	}
 
 	var input Input
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		fmt.Fprintf(w, "%s\n", err)
-		fmt.Fprint(w, "正しい形のJSONデータを渡してください")
-		return
+		return false, err.Error() + "\n正しい形でJSONデータを渡してください"
 	}
 
-	fmt.Fprintln(w, "OK")
+	return true, ""
 }
