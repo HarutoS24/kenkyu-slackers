@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
   import OptionSelector from "./OptionSelector.vue"
-  import { onMounted, ref, useTemplateRef } from "vue";
+  import { onMounted, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
   import { getFeedbackFromGPT, getIndustryIds } from "@/pages/AppRoot/api-call";
 
@@ -18,16 +18,7 @@
     }
   }
 
-  const mdEditorRef = useTemplateRef("md-editor");
-  const getMdValue = () => {
-    const mdEditor = mdEditorRef.value;
-    if (mdEditor !== null) {
-      return mdEditor.getValue();
-    }
-    else {
-      return "";
-    }
-  }
+  const markdownContent = ref("");
 
   const industryOptions = ref<ReviewCustomizeOption>({});
   const fugaOptions = ref<ReviewCustomizeOption>({});
@@ -42,7 +33,7 @@
   const resultAdvice = ref("");
 
   const onSubmit = async () => {
-    console.log(getMdValue());
+    console.log(markdownContent.value);
     const data = await getFeedbackFromGPT();
     resultSuggestion.value = data.improved_press;
     resultAdvice.value = data.Advice;
@@ -61,16 +52,11 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="本文（マークダウン）" label-position="top">
-            <markdown-editor ref="md-editor" />
+            <markdown-editor v-model="markdownContent" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="変更案" label-position="top">
-            <el-input
-              v-model="resultSuggestion"
-              type="textarea"
-              disabled
-            />
+          <el-form-item label="プレビュー" label-position="top">
           </el-form-item>
         </el-col>
       </el-row>
@@ -78,15 +64,6 @@
         <el-button type="primary" @click="onSubmit">
           送信
         </el-button>
-      </el-form-item>
-    </el-form>
-    <el-form>
-      <el-form-item label="アドバイス" label-position="top">
-        <el-input
-          v-model="resultAdvice"
-          type="textarea"
-          disabled
-        />
       </el-form-item>
     </el-form>
   </div>

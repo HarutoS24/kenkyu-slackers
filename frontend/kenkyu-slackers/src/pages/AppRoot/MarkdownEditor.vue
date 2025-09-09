@@ -3,27 +3,30 @@
   import { markdown } from "@codemirror/lang-markdown";
   import { onMounted, useTemplateRef } from 'vue';
 
-  let editorView: EditorView | undefined;
+  // コンポーネント外から読む（リアクティブ）
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const value = defineModel({
+    type: String
+  });
+
   const mdEditorRef = useTemplateRef("markdown-editor");
   onMounted(() => {
     const mdEditorDOM = mdEditorRef.value;
     if (mdEditorDOM !== null) {
-      editorView = new EditorView({
-        extensions: [basicSetup, markdown()],
+      new EditorView({
+        extensions: [
+          basicSetup,
+          markdown(),
+          EditorView.updateListener.of((update) => {
+            if (update.docChanged) {
+              value.value = update.state.doc.toString();
+            }
+          }),
+        ],
         parent: mdEditorDOM
       });
     }
   });
-
-  const getValue = (): string => {
-    if (editorView !== undefined) {
-      return editorView.state.doc.toString();
-    }
-    else {
-      return "";
-    }
-  }
-  defineExpose({ getValue });
 </script>
 
 <template>
