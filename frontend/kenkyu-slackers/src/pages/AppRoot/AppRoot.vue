@@ -1,34 +1,12 @@
 <script setup lang="ts">
-  import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
-  import { computed, onMounted, ref } from "vue";
+  import { computed, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
-  import { getFeedbackFromGPT, getIndustryIds } from "@/pages/AppRoot/api-call";
   import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
   import OptionModal from "@/pages/AppRoot/OptionModal.vue";
 
-  const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
-    if (optionName === "industry") {
-      const rawData = Object.entries(await getIndustryIds());
-      const data: ReviewCustomizeOption = Object.fromEntries(
-        rawData.map(e => [e[0], { value: e[0], label: e[1] as string }])
-      );
-      return data;
-    }
-    else {
-      throw new Error(`Specified option name ${optionName} is not valid.`);
-    }
-  }
-
   const markdownContent = ref("");
-
-  const industryOptions = ref<ReviewCustomizeOption>({});
-  const fugaOptions = ref<ReviewCustomizeOption>({});
   const industryValues = ref<string[]>([]);
   const fugaValues = ref<string[]>([]);
-  onMounted(async () => {
-    industryOptions.value = await getOptions("industry");
-    fugaOptions.value = await getOptions("industry");
-  })
 
   const industryLabels = ref<string[]>([]);
   const setIndustryLabels = (v: string[]) => industryLabels.value = v;
@@ -52,14 +30,8 @@
     }
   });
 
-  const resultSuggestion = ref("");
-  const resultAdvice = ref("");
-
   const onSubmit = async () => {
-    console.log(markdownContent.value);
-    const data = await getFeedbackFromGPT();
-    resultSuggestion.value = data.improved_press;
-    resultAdvice.value = data.Advice;
+    // TODO:
   }
 </script>
 
