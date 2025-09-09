@@ -4,7 +4,7 @@
   import { onMounted, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
   import { getFeedbackFromGPT, getIndustryIds } from "@/pages/AppRoot/api-call";
-import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
+  import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
 
   const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
     if (optionName === "industry") {
