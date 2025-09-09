@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
   import OptionSelector from "./OptionSelector.vue"
-  import { onMounted, ref } from "vue";
+  import { onMounted, ref, useTemplateRef } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
   import { getFeedbackFromGPT, getIndustryIds } from "@/pages/AppRoot/api-call";
 
@@ -18,11 +18,21 @@
     }
   }
 
+  const mdEditorRef = useTemplateRef("md-editor");
+  const getMdValue = () => {
+    const mdEditor = mdEditorRef.value;
+    if (mdEditor !== null) {
+      return mdEditor.getValue();
+    }
+    else {
+      return "";
+    }
+  }
+
   const industryOptions = ref<ReviewCustomizeOption>({});
   const fugaOptions = ref<ReviewCustomizeOption>({});
   const industryValue = ref([]);
   const fugaValue = ref([]);
-  const markdownContent = ref("");
   onMounted(async () => {
     industryOptions.value = await getOptions("industry");
     fugaOptions.value = await getOptions("industry");
@@ -32,6 +42,7 @@
   const resultAdvice = ref("");
 
   const onSubmit = async () => {
+    console.log(getMdValue());
     const data = await getFeedbackFromGPT();
     resultSuggestion.value = data.improved_press;
     resultAdvice.value = data.Advice;
@@ -50,7 +61,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="本文（マークダウン）" label-position="top">
-            <markdown-editor :value="markdownContent" />
+            <markdown-editor ref="md-editor" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
