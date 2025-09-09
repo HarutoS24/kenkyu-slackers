@@ -17,10 +17,26 @@ type Response struct {
 }
 
 func main() {
-	http.HandleFunc("/industry_ids", getIndustryIDs)
-	http.HandleFunc("/get_feedback_from_GPT", getFeedbackFromGPT)
-	http.HandleFunc("/check", checkApiRequest)
+	http.Handle("/industry_ids", corsMiddleware(http.HandlerFunc(getIndustryIDs)))
+	http.Handle("/get_feedback_from_GPT", corsMiddleware(http.HandlerFunc(getFeedbackFromGPT)))
+	http.Handle("/check", corsMiddleware(http.HandlerFunc(checkApiRequest)))
 	http.ListenAndServe(":8080", nil)
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "localhost:5173")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 // 指定可能な業種とそのid
