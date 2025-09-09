@@ -32,7 +32,7 @@
   });
 
   const onSubmit = async () => {
-    router.push("/submit");
+    router.push("/result");
   }
 </script>
 
