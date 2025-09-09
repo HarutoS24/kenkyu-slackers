@@ -6,11 +6,6 @@
   import { onMounted, ref, watch } from "vue";
 
   const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
-    return {
-      value1: { value: "value1", label: "label1" },
-      value2: { value: "value2", label: "label2" },
-      value3: { value: "value3", label: "label3" },
-    }
     if (optionName === "industry") {
       const rawData = Object.entries(await getIndustryIds());
       const data: ReviewCustomizeOption = Object.fromEntries(
