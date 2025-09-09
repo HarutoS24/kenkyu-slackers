@@ -6,12 +6,14 @@
     options: ReviewCustomizeOption,
     type: "select" | "checkbox",
   }>()
+
   const values = defineModel<string[]>({ required: true });
   const singleValue = computed({
     get: () => values.value[0],
-    set: (newValue) => values.value[0] = newValue,
+    set: (newValue) => {
+      values.value = [newValue];
+    },
   });
-
 </script>
 
 <template>

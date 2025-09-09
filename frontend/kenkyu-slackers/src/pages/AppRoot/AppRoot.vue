@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
-  import OptionSelector from "./OptionSelector.vue"
-  import { onMounted, ref } from "vue";
+  import { computed, onMounted, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
   import { getFeedbackFromGPT, getIndustryIds } from "@/pages/AppRoot/api-call";
   import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
+  import OptionModal from "@/pages/AppRoot/OptionModal.vue";
 
   const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
     if (optionName === "industry") {
@@ -23,12 +23,34 @@
 
   const industryOptions = ref<ReviewCustomizeOption>({});
   const fugaOptions = ref<ReviewCustomizeOption>({});
-  const industryValue = ref([]);
-  const fugaValue = ref([]);
+  const industryValues = ref<string[]>([]);
+  const fugaValues = ref<string[]>([]);
   onMounted(async () => {
     industryOptions.value = await getOptions("industry");
     fugaOptions.value = await getOptions("industry");
   })
+
+  const industryLabels = ref<string[]>([]);
+  const setIndustryLabels = (v: string[]) => industryLabels.value = v;
+  const industryLabelString = computed(() => {
+    if (industryLabels.value.length === 0) {
+      return "未選択"
+    }
+    else {
+      return industryLabels.value[0];
+    }
+  });
+
+  const fugaLabels = ref<string[]>([]);
+  const setFugaLabels = (v: string[]) => fugaLabels.value = v;
+  const fugaLabelString = computed(() => {
+    if (fugaLabels.value.length === 0) {
+      return "未選択"
+    }
+    else {
+      return fugaLabels.value.join(", ");
+    }
+  });
 
   const resultSuggestion = ref("");
   const resultAdvice = ref("");
@@ -44,11 +66,19 @@
 <template>
   <div class="container">
     <el-form>
-      <el-form-item label="業種">
-        <option-selector v-model="industryValue" :options="industryOptions" type="select" />
-      </el-form-item>
-      <el-form-item label="選択肢2">
-        <option-selector v-model="fugaValue" :options="fugaOptions" type="checkbox" />
+      <el-form-item class="option-modal">
+        <option-modal
+          v-model:industry="industryValues"
+          v-model:fuga="fugaValues"
+          @set-industry-label="setIndustryLabels"
+          @set-fuga-label="setFugaLabels"
+        />
+        <div class="line"></div>
+        <div class="label">業種</div>
+        <div class="value">{{ industryLabelString }}</div>
+        <div class="line"></div>
+        <div class="label">選択肢2</div>
+        <div class="value">{{ fugaLabelString }}</div>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -75,5 +105,25 @@
   .container {
     padding: 0 8vw;
     scrollbar-color: #ccc #fff;
+  }
+
+  .option-modal :deep(.el-form-item__content) {
+    gap: 15px;
+  }
+
+  .option-modal div.label {
+    font-size: 0.66rem;
+    padding: 4px;
+    border: 1px solid #ccc;
+    line-height: 1;
+  }
+
+  .option-modal div.line {
+    height: 15px;
+    border-left: 1px solid #999;
+  }
+
+  .option-modal div.label + div.value {
+    margin-left: -8px;
   }
 </style>
