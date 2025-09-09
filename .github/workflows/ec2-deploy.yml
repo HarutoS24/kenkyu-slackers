@@ -1,0 +1,41 @@
+name: ec2-deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+env:
+  AWS_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }} #Ownerに環境変数を設定してもらう
+jobs:
+  ec2-access-test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23.1'
+
+      - name: Build Go application
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o kenkyu-slackers .
+        working-directory: ./backend
+
+      - name: ssh to EC2
+        run: |
+          mkdir -p ~/.ssh
+          echo "$AWS_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Copy files to EC2
+        run: |
+         scp -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa -i ~/.ssh/id_rsa backend/kenkyu-slackers ec2-user@52.68.239.101:~/kenkyu-slackers
