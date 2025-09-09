@@ -1,0 +1,54 @@
+name: FrontendDeploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ap-northeast-1
+  AWS_ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/front-deploy #Ownerに環境変数を設定してもらう
+  AWS_S3_BUCKET: s3-vue-deploy
+  AWS_CLOUDFRONT_DISTRIBUTION_ID: E21ZJ7UK2JI3PV
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.7.0
+          cache: "npm"
+          cache-dependency-path: "frontend/kenkyu-slackers/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./frontend/kenkyu-slackers
+
+      - name: Build
+        run: npm run build
+        working-directory: ./frontend/kenkyu-slackers
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+
+      - name: Deploy
+        run: |
+                aws s3 sync --exact-timestamps --delete dist s3://${{ env.AWS_S3_BUCKET }} 
+        working-directory: ./frontend/kenkyu-slackers
+
+      - name: Clear Cache
+        run: |
+                aws cloudfront create-invalidation --distribution-id ${{ env.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths '/*'
