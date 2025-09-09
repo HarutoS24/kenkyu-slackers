@@ -8,11 +8,7 @@
   import { storeToRefs } from "pinia";
 
   const markdownContentStore = useReviewContentStore();
-  // TODO: industryValues/fugaValuesをこっちに置き換える
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { markdownContent, industryIds, importantAspects } = storeToRefs(markdownContentStore);
-  const industryValues = ref<string[]>([]);
-  const fugaValues = ref<string[]>([]);
 
   const industryLabels = ref<string[]>([]);
   const setIndustryLabels = (v: string[]) => industryLabels.value = v;
@@ -25,14 +21,14 @@
     }
   });
 
-  const fugaLabels = ref<string[]>([]);
-  const setFugaLabels = (v: string[]) => fugaLabels.value = v;
-  const fugaLabelString = computed(() => {
-    if (fugaLabels.value.length === 0) {
+  const aspectLabels = ref<string[]>([]);
+  const setAspectLabels = (v: string[]) => aspectLabels.value = v;
+  const aspectLabelString = computed(() => {
+    if (aspectLabels.value.length === 0) {
       return "未選択"
     }
     else {
-      return fugaLabels.value.join(", ");
+      return aspectLabels.value.join(", ");
     }
   });
 
@@ -46,17 +42,17 @@
     <el-form>
       <el-form-item class="option-modal">
         <option-modal
-          v-model:industry="industryValues"
-          v-model:fuga="fugaValues"
+          v-model:industry="industryIds"
+          v-model:aspect="importantAspects"
           @set-industry-label="setIndustryLabels"
-          @set-fuga-label="setFugaLabels"
+          @set-aspect-label="setAspectLabels"
         />
         <div class="line"></div>
         <div class="label">業種</div>
         <div class="value">{{ industryLabelString }}</div>
         <div class="line"></div>
-        <div class="label">選択肢2</div>
-        <div class="value">{{ fugaLabelString }}</div>
+        <div class="label">メディアフック</div>
+        <div class="value">{{ aspectLabelString }}</div>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="12">

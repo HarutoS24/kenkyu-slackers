@@ -26,23 +26,23 @@
   const showState = ref(false);
 
   const industryOptions = ref<ReviewCustomizeOption>({});
-  const fugaOptions = ref<ReviewCustomizeOption>({});
+  const aspectOptions = ref<ReviewCustomizeOption>({});
   onMounted(async () => {
     industryOptions.value = await getOptions("industry");
-    fugaOptions.value = await getOptions("industry");
+    aspectOptions.value = await getOptions("aspect");
   })
 
   const industryValues = defineModel<string[]>("industry", { required: true });
-  const fugaValues = defineModel<string[]>("fuga", { required: true });
+  const aspectValues = defineModel<string[]>("aspect", { required: true });
 
-  const emit = defineEmits(["setIndustryLabel", "setFugaLabel"]);
+  const emit = defineEmits(["setIndustryLabel", "setAspectLabel"]);
   watch(industryValues, newValues => {
     console.log("a");
     emit("setIndustryLabel", newValues.map(e => industryOptions.value[e]?.label ?? `unknown value (${e})`));
   });
-  watch(fugaValues, newValues => {
+  watch(aspectValues, newValues => {
     console.log("b");
-    emit("setFugaLabel", newValues.map(e => fugaOptions.value[e]?.label ?? `unknown value (${e})`));
+    emit("setAspectLabel", newValues.map(e => aspectOptions.value[e]?.label ?? `unknown value (${e})`));
   });
 </script>
 
@@ -57,7 +57,7 @@
             <option-selector v-model="industryValues" :options="industryOptions" type="select" />
           </el-form-item>
           <el-form-item label="選択肢2">
-            <option-selector v-model="fugaValues" :options="fugaOptions" type="checkbox" />
+            <option-selector v-model="aspectValues" :options="aspectOptions" type="checkbox" />
           </el-form-item>
         </el-form>
       </template>
