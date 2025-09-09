@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import ModalWindow from "@/components/ModalWindow.vue";
-  import { getIndustryIds } from "@/pages/AppRoot/api-call";
+  import { getAspects, getIndustryIds } from "@/pages/AppRoot/api-call";
   import OptionSelector from "@/pages/AppRoot/OptionSelector.vue";
   import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
   import { onMounted, ref, watch } from "vue";
@@ -8,6 +8,13 @@
   const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
     if (optionName === "industry") {
       const rawData = Object.entries(await getIndustryIds());
+      const data: ReviewCustomizeOption = Object.fromEntries(
+        rawData.map(e => [e[0], { value: e[0], label: e[1] as string }])
+      );
+      return data;
+    }
+    else if (optionName === "aspect") {
+      const rawData = Object.entries(await getAspects());
       const data: ReviewCustomizeOption = Object.fromEntries(
         rawData.map(e => [e[0], { value: e[0], label: e[1] as string }])
       );
