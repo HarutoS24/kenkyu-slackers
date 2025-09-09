@@ -65,8 +65,10 @@ var aspectMap = map[string]string{
 	"1": "話題性",
 }
 
+// ----- Global -----
 var db *sql.DB
 
+// ----- Initialization -----
 func init() {
 	if err := godotenv.Load(); err != nil {
 		fmt.Printf("Warning: .env ファイル読み込み失敗: %v\n", err)
@@ -95,10 +97,11 @@ func initDB() {
 	}
 }
 
+// ----- Middleware -----
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		frontend_port := os.Getenv("FRONTEND_PORT")
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:"+frontend_port)
+		frontendPort := os.Getenv("FRONTEND_PORT")
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:"+frontendPort)
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
