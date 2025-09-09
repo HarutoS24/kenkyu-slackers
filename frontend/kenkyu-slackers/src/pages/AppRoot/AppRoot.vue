@@ -3,33 +3,39 @@
   import OptionSelector from "./OptionSelector.vue"
   import { onMounted, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
+  import { getAxios } from "@/util/axios";
 
-  const getOptions = (optionType: string): ReviewCustomizeOption => {
-    // TODO: 本番実装置き換え
-    return {
-      1: {
-        value: `${optionType}-value1`,
-        label: `${optionType}-label1`,
-      },
-      2: {
-        value: `${optionType}-value2`,
-        label: `${optionType}-label2`,
-      },
-      3: {
-        value: `${optionType}-value3`,
-        label: `${optionType}-label3`,
-      },
+  const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
+    const endpointMap = new Map([
+      ["industry", "/industry_ids"]
+    ])
+
+    if (endpointMap.has(optionName)) {
+      const res = await getAxios().get(endpointMap.get(optionName)!);
+      if (res.status === 200) {
+        const rawData = Object.entries(res.data);
+        const data: ReviewCustomizeOption = Object.fromEntries(
+          rawData.map(e => [e[0], { value: e[0], label: e[1] as string }])
+        );
+        return data;
+      }
+      else {
+        throw new Error(`The API response was invalid (status ${res.status}).`);
+      }
+    }
+    else {
+      throw new Error(`Specified option name ${optionName} is not valid.`);
     }
   }
 
-  const hogeOptions = ref<ReviewCustomizeOption>({});
+  const industryOptions = ref<ReviewCustomizeOption>({});
   const fugaOptions = ref<ReviewCustomizeOption>({});
-  const hogeValues = ref([]);
-  const fugaValues = ref([]);
+  const industryValue = ref([]);
+  const fugaValue = ref([]);
   const markdownContent = ref("");
-  onMounted(() => {
-    hogeOptions.value = getOptions("hoge");
-    fugaOptions.value = getOptions("fuga");
+  onMounted(async () => {
+    industryOptions.value = await getOptions("industry");
+    fugaOptions.value = await getOptions("industry");
   })
 
   const resultSuggestion = ref("");
@@ -39,11 +45,11 @@
 <template>
   <div class="container">
     <el-form>
-      <el-form-item label="選択肢1">
-        <option-selector :values="hogeValues" :options="hogeOptions" type="select" />
+      <el-form-item label="業種">
+        <option-selector :values="industryValue" :options="industryOptions" type="select" />
       </el-form-item>
       <el-form-item label="選択肢2">
-        <option-selector :values="fugaValues" :options="fugaOptions" type="checkbox" />
+        <option-selector :values="fugaValue" :options="fugaOptions" type="checkbox" />
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="12">
