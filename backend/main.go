@@ -278,48 +278,53 @@ func isRequestOK(r *http.Request) (bool, string) {
 	return true, ""
 }
 
-func sendRequestToGPT(input Input) ResponseFromGPT {
-	file, err := os.Open("assets/GPT/system_prompt.txt")
+func generateReplacedText(path string, vars map[string]interface{}) (string, error) {
+	file, err := os.Open(path)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	defer file.Close()
 
 	var fullText string
 	scanner := bufio.NewScanner(file)
-
-	vars := map[string]interface{}{
-		"industry_id":       input.IndustryId,
-		"important_aspects": input.ImportantAspects,
-	}
-
+	re := regexp.MustCompile(`\$\{(\w+)\}`)
 	for scanner.Scan() {
 		line := scanner.Text()
-		re := regexp.MustCompile(`\$\{(\w+)\}`)
 		result := re.ReplaceAllStringFunc(line, func(s string) string {
 			matches := re.FindStringSubmatch(s)
 			if len(matches) < 2 {
 				return s
 			}
 			key := matches[1]
-
 			val, ok := vars[key]
 			if !ok {
 				return s
 			}
-
-			// interface{} を string に変換
+			if strings.Contains(key, "int") {
+				return fmt.Sprintf("%v", val)
+			}
 			switch v := val.(type) {
 			case string:
-				return v
+				return fmt.Sprintf("\n・%s\n", v)
 			case []string:
-				return strings.Join(v, ",") // 配列ならカンマ区切りで結合
+				var aspectsStr = "\n"
+				for _, s := range v {
+					if name, ok := aspectMap[s]; ok {
+						aspectsStr += fmt.Sprintf("・%s\n", name)
+					} else {
+						aspectsStr += fmt.Sprintf("・%s\n", s)
+					}
+				}
+				return aspectsStr
 			default:
 				return fmt.Sprintf("%v", val)
 			}
 		})
 		fullText += result + "\n"
 	}
+	return fullText, nil
+}
+
 // ----- GPT API -----
 func sendRequestToGPT(input Input) (ResponseFromGPT, error) {
 	releaseTypeMap := getReleaseTypeMap()
