@@ -215,13 +215,40 @@ func returnPopularPresses(w http.ResponseWriter, r *http.Request) {
 func getFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 	var input Input
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		http.Error(w, "正しい形でJSONデータを渡してください", http.StatusBadRequest)
+func checkApiRequest(w http.ResponseWriter, r *http.Request) {
+	if ok, msg := isRequestOK(r); !ok {
+		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
-	fmt.Fprintf(w, "%+v", input)
-	response := sendRequestToGPT(input)
+	fmt.Fprintln(w, "OK")
+}
 
-	fmt.Fprintf(w, "%+v", response)
+// ----- Validation -----
+func isRequestOK(r *http.Request) (bool, string) {
+	if r.Method != http.MethodPost {
+		return false, "POSTメソッドでアクセスしてください"
+	}
+
+	var input Input
+	var buf bytes.Buffer
+	tee := io.TeeReader(r.Body, &buf)
+	if err := json.NewDecoder(tee).Decode(&input); err != nil {
+		return false, "正しいJSON構造で送信してください"
+	}
+	r.Body = io.NopCloser(&buf)
+
+	releaseTypeMap := getReleaseTypeMap()
+	if _, ok := releaseTypeMap[input.ReleaseTypeId]; !ok {
+		return false, "release_type_id: 不正な値指定です"
+	}
+
+	for _, v := range input.ImportantAspects {
+		if _, ok := aspectMap[v]; !ok {
+			return false, "important_aspects: 不正な値指定です"
+		}
+	}
+
+	return true, ""
 }
 
 func sendRequestToGPT(input Input) ResponseFromGPT {
