@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -38,6 +41,8 @@ type ResponseFromGPT struct {
 type Choices struct {
 	Message Message `json:"message"`
 }
+
+const model_name = "gpt-4.1-nano"
 
 var db *sql.DB
 
