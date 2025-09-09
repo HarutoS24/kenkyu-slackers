@@ -112,10 +112,13 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func getIndustryMap() IndustryMap {
-	var sqlQuery string
-
-	file, err := os.Open("assets/SQL/get_industry_table.txt")
+// ----- Utilities -----
+func respondJSON(w http.ResponseWriter, data interface{}) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
 	if err != nil {
 		panic(err)
 	}
