@@ -1,5 +1,6 @@
 import AppLayout from '@/layouts/AppLayout.vue'
 import AppRoot from '@/pages/AppRoot/AppRoot.vue'
+import ResultPage from '@/pages/ResultPage/ResultPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -10,6 +11,7 @@ const router = createRouter({
       component: AppLayout,
       children: [
         { path: "", component: AppRoot },
+        { path: "result", component: ResultPage },
       ]
     }
   ],

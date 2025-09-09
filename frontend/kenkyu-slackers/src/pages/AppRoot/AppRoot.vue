@@ -3,6 +3,7 @@
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
   import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
   import OptionModal from "@/pages/AppRoot/OptionModal.vue";
+  import router from "@/router";
 
   const markdownContent = ref("");
   const industryValues = ref<string[]>([]);
@@ -31,7 +32,7 @@
   });
 
   const onSubmit = async () => {
-    // TODO:
+    router.push("/submit");
   }
 </script>
 
