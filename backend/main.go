@@ -69,23 +69,30 @@ var db *sql.DB
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		panic(err)
+		fmt.Printf("Warning: .env ファイル読み込み失敗: %v\n", err)
 	}
-	db_password := os.Getenv("DB_PASSWORD")
-	db_port := os.Getenv("DB_PORT")
-	connStr := "postgres://hackathon:" + db_password + "@localhost:" + db_port + "/hackathon_db?sslmode=require"
+	initDB()
+}
+
+func initDB() {
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbPort := os.Getenv("DB_PORT")
+	if dbPassword == "" || dbPort == "" {
+		fmt.Println("DB_PASSWORD または DB_PORT が設定されていません")
+		os.Exit(1)
+	}
+
+	connStr := fmt.Sprintf("postgres://hackathon:%s@localhost:%s/hackathon_db?sslmode=require", dbPassword, dbPort)
 	var err error
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
-		panic(err)
+		fmt.Printf("DB接続失敗: %v\n", err)
+		os.Exit(1)
 	}
-}
-
-func main() {
-	http.Handle("/industry_ids", corsMiddleware(http.HandlerFunc(getIndustryIDs)))
-	http.Handle("/get_feedback_from_GPT", corsMiddleware(http.HandlerFunc(getFeedbackFromGPT)))
-	http.Handle("/check", corsMiddleware(http.HandlerFunc(checkApiRequest)))
-	http.ListenAndServe(":8080", nil)
+	if err := db.Ping(); err != nil {
+		fmt.Printf("DB接続確認失敗: %v\n", err)
+		os.Exit(1)
+	}
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
