@@ -18,13 +18,15 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// ----- Structs -----
 type Input struct {
-	IndustryId       string   `json:"industry_id"`
+	Text             string   `json:"text"`
+	ReleaseTypeId    string   `json:"release_type_id"`
 	ImportantAspects []string `json:"important_aspects"`
 }
 
 type Response struct {
-	Advice        string
+	Advice        string `json:"advice"`
 	ImprovedPress string `json:"improved_press"`
 }
 
@@ -46,14 +48,22 @@ type Choices struct {
 	Message Message `json:"message"`
 }
 
-type Industry struct {
-	IndustryId   int    `json:"industry_id"`
-	IndustryName string `json:"industry_name"`
+type ReleaseType struct {
+	ReleaseTypeId   int    `json:"release_type_id"`
+	ReleaseTypeName string `json:"release_type_name"`
 }
 
-type IndustryMap = map[int]string
+type Press struct {
+	Body string `json:"body"`
+}
 
-const model_name = "gpt-4.1-nano"
+// ----- Constants -----
+const modelName = "gpt-4.1-nano"
+
+var aspectMap = map[string]string{
+	"0": "時流性",
+	"1": "話題性",
+}
 
 var db *sql.DB
 
