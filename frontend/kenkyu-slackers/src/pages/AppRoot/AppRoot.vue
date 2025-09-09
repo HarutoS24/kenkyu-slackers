@@ -4,8 +4,13 @@
   import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
   import OptionModal from "@/pages/AppRoot/OptionModal.vue";
   import router from "@/router";
+  import { useReviewContentStore } from "@/stores/review-content";
+  import { storeToRefs } from "pinia";
 
-  const markdownContent = ref("");
+  const markdownContentStore = useReviewContentStore();
+  // TODO: industryValues/fugaValuesをこっちに置き換える
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { markdownContent, industryIds, importantAspects } = storeToRefs(markdownContentStore);
   const industryValues = ref<string[]>([]);
   const fugaValues = ref<string[]>([]);
 
