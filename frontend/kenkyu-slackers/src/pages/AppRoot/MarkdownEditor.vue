@@ -3,8 +3,6 @@
   import { markdown } from "@codemirror/lang-markdown";
   import { onMounted, useTemplateRef } from 'vue';
 
-  // コンポーネント外から読む（リアクティブ）
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const value = defineModel({
     type: String
   });
