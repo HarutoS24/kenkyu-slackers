@@ -380,25 +380,20 @@ func sendRequestToGPT(input Input) (ResponseFromGPT, error) {
 	return response, nil
 }
 
-// Apiに対するリクエストについて、とりあえず構造とアクセス方法が正しければOK, ダメなら原因を表示する
-func checkApiRequest(w http.ResponseWriter, r *http.Request) {
-	if isOK, errStr := isRequestOK(r); !isOK {
-		fmt.Fprintln(w, errStr)
-		return
+// ----- Main -----
+func main() {
+	http.Handle("/release_type", corsMiddleware(http.HandlerFunc(returnReleaseTypeMap)))
+	http.Handle("/aspect", corsMiddleware(http.HandlerFunc(returnAspectMap)))
+	http.Handle("/get_feedback_from_GPT", corsMiddleware(http.HandlerFunc(returnFeedbackFromGPT)))
+	http.Handle("/popular_presses", corsMiddleware(http.HandlerFunc(returnPopularPresses)))
+	http.Handle("/check", corsMiddleware(http.HandlerFunc(checkApiRequest)))
+	http.HandleFunc("/test", test)
+
+	fmt.Println("Server running on :8080")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		fmt.Printf("Server error: %v\n", err)
+		os.Exit(1)
 	}
-	fmt.Fprintln(os.Stdout, "OK")
 }
 
-// Apiに対するリクエストについて、とりあえず構造とアクセス方法が正しいかを判定
-func isRequestOK(r *http.Request) (bool, string) {
-	if r.Method != http.MethodPost {
-		return false, "POSTメソッドでアクセスしてください"
-	}
-
-	var input Input
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		return false, err.Error() + "\n正しい形でJSONデータを渡してください"
-	}
-
-	return true, ""
 }
