@@ -4,6 +4,7 @@
   import { onMounted, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
   import { getFeedbackFromGPT, getIndustryIds } from "@/pages/AppRoot/api-call";
+import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
 
   const getOptions = async (optionName: string): Promise<ReviewCustomizeOption> => {
     if (optionName === "industry") {
@@ -57,6 +58,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="プレビュー" label-position="top">
+            <markdown-renderer class="md-renderer" :source="markdownContent" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -72,5 +74,6 @@
 <style scoped>
   .container {
     padding: 0 8vw;
+    scrollbar-color: #ccc #fff;
   }
 </style>

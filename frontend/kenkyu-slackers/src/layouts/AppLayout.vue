@@ -29,7 +29,7 @@
 
     margin: 0;
     padding: 0 10vw;
-    width: 100%;
+    width: 80vw;
     height: 100%;
   }
 </style>
