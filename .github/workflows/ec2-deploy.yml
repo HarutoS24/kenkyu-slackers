@@ -41,8 +41,10 @@ jobs:
           ssh -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa -i ~/.ssh/id_rsa ec2-user@52.68.239.101 "
             sudo systemctl stop kenkyu-slackers || echo 'Service not running'
             rm -f ~/kenkyu-slackers
+            rm -rf ~/assets
           "
 
       - name: Copy files to EC2
         run: |
-         scp -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa -i ~/.ssh/id_rsa backend/kenkyu-slackers ec2-user@52.68.239.101:~/kenkyu-slackers
+          scp -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa -i ~/.ssh/id_rsa backend/kenkyu-slackers ec2-user@52.68.239.101:~/kenkyu-slackers
+          scp -r -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa -i ~/.ssh/id_rsa backend/assets ec2-user@52.68.239.101:~/
