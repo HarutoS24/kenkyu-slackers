@@ -16,7 +16,7 @@ Go
 バックエンドapiについて
 ・check->POSTメソッドでアクセスする必要がある。JSONデータを下のように投げるとアクセスできる。
 >```go
-> {"industry_id": "9", "important_aspects": ["0", "1"]}
+> {"text": "このたび弊社は、、","industry_id": "9", "important_aspects": ["0", "1"]}
 >
 ・（未実装）アドバイスと修正例を返却するapi->POSTメソッドを使い、上述のJSONデータを投げると下のようなjsonデータを返却する。
 >```go
