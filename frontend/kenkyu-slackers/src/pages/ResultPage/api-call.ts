@@ -15,6 +15,11 @@ const getFeedbackFromGPTResponseSchema = z.object({
 
 export const getFeedbackFromGPT = async (req: GetFeedbackFromGPTRequestSchema) => {
   getFeedbackFromGPTRequestSchema.parse(req);
+  return {
+    advice: `☆☆☆アドバイス文章☆☆☆\n「リリースの概要」: ${req.release_type_id}\n「メディアフック」: ${req.important_aspects}`,
+    improved_press: `*修正前のマークダウンを以下にそのまま出力しています*\n${req.text}`,
+  }
+
   console.log(req);
 
   const res = await getAxios().post("/get_feedback_from_GPT", req);

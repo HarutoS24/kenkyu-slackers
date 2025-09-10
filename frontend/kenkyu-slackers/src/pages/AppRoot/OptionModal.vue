@@ -32,19 +32,26 @@
   onMounted(async () => {
     industryOptions.value = await getOptions("industry");
     aspectOptions.value = await getOptions("aspect");
-    industryValues.value = [ Object.values(industryOptions.value)[0].value ];
+    if (industryValues.value.length === 0) {
+      industryValues.value = [ Object.values(industryOptions.value)[0].value ];
+    }
+    emitSetIndustryLabel(industryValues.value);
+    emitSetAspectLabel(aspectValues.value);
   })
 
   const industryValues = defineModel<string[]>("industry", { required: true });
   const aspectValues = defineModel<string[]>("aspect", { required: true });
 
   const emit = defineEmits(["setIndustryLabel", "setAspectLabel"]);
-  watch(industryValues, newValues => {
+  const emitSetIndustryLabel = (newValues: string[]) => {
     emit("setIndustryLabel", newValues.map(e => industryOptions.value[e]?.label ?? `unknown value (${e})`));
-  });
-  watch(aspectValues, newValues => {
+  };
+  const emitSetAspectLabel = (newValues: string[]) => {
     emit("setAspectLabel", newValues.map(e => aspectOptions.value[e]?.label ?? `unknown value (${e})`));
-  });
+  };
+
+  watch(industryValues, emitSetIndustryLabel);
+  watch(aspectValues, emitSetAspectLabel);
 </script>
 
 <template>
