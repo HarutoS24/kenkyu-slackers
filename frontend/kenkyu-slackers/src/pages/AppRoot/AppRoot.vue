@@ -13,12 +13,7 @@
   const industryLabels = ref<string[]>([]);
   const setIndustryLabels = (v: string[]) => industryLabels.value = v;
   const industryLabelString = computed(() => {
-    if (industryLabels.value.length === 0) {
-      return "未選択"
-    }
-    else {
-      return industryLabels.value[0];
-    }
+    return industryLabels.value[0];
   });
 
   const aspectLabels = ref<string[]>([]);

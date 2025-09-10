@@ -2,7 +2,7 @@
   import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
   import { computed } from "vue";
 
-  defineProps<{
+  const { options, type } = defineProps<{
     options: ReviewCustomizeOption,
     type: "select" | "checkbox",
   }>()

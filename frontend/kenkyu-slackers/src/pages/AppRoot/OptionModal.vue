@@ -32,6 +32,7 @@
   onMounted(async () => {
     industryOptions.value = await getOptions("industry");
     aspectOptions.value = await getOptions("aspect");
+    industryValues.value = [ Object.values(industryOptions.value)[0].value ];
   })
 
   const industryValues = defineModel<string[]>("industry", { required: true });
@@ -39,11 +40,9 @@
 
   const emit = defineEmits(["setIndustryLabel", "setAspectLabel"]);
   watch(industryValues, newValues => {
-    console.log("a");
     emit("setIndustryLabel", newValues.map(e => industryOptions.value[e]?.label ?? `unknown value (${e})`));
   });
   watch(aspectValues, newValues => {
-    console.log("b");
     emit("setAspectLabel", newValues.map(e => aspectOptions.value[e]?.label ?? `unknown value (${e})`));
   });
 </script>
