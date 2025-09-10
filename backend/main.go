@@ -95,12 +95,13 @@ func init() {
 func initDB() {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbPort := os.Getenv("DB_PORT")
+	dbHost := os.Getenv("DB_HOST")
 	if dbPassword == "" || dbPort == "" {
 		fmt.Println("DB_PASSWORD または DB_PORT が設定されていません")
 		os.Exit(1)
 	}
 
-	connStr := fmt.Sprintf("postgres://hackathon:%s@localhost:%s/hackathon_db?sslmode=require", dbPassword, dbPort)
+	connStr := fmt.Sprintf("postgres://hackathon:%s@%s:%s/hackathon_db?sslmode=require", dbPassword, dbHost, dbPort)
 	var err error
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
@@ -267,10 +268,6 @@ func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			response.ImprovedPress = markdown
-			respondJSON(w, response)
-			return
-		} else if len(matches) == 1 {
-			response.Advice = matches[0][1]
 			respondJSON(w, response)
 			return
 		}
