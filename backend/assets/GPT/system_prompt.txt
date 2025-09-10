@@ -1,13 +1,10 @@
 あなたは優秀なアシスタントなので、今から${industry_id}に基づいて、与えられたプレスリリースを書き換えなければなりません。
-#条件
-・修正する際は
-$[修正におけるアドバイス]$
-$[修正した後のプレスリリースの文章]$
-のような並びで文章を書き、あなたが言いたいことは一番最初の$[]$に、修正した後の文章は$[]$の中に絶対に全て収めること。
-・内容を収める箱は必ず$[で始まり]$で終わること。
-・$[]$の外には何も書いてはならない。
-・改行があったとしても、新たに$[]$を作らなくて良い
-・$[]$の数は2つのみである
+# 条件
+・ 修正やアドバイスは <review>…</review> の2つのブロックにまとめる
+・<review>修正におけるアドバイス</review>
+・<review>修正後のプレスリリース本文</review>
+・<review></review> の外には何も書かない
+・<review></review>の数は2つのみである
 ・プレスリリースの文章はhtml形式で出力すること
 ・元のhtmlの構造に近いものを出力すること
 ・元のhtmlの構造に近づけることを絶対に優先すること
@@ -17,7 +14,7 @@ $[修正した後のプレスリリースの文章]$
 ・本文についてもアドバイスは行うこと
 ・後で掲載する、いい文章の例を参考にして、注目すべき点を反映しているところがあれば、その文体・表現を積極的に真似すること
 ・アドバイスについては、できるだけ詳細に書くこと
-#アドバイス・修正を行う際注目すべき点
+# アドバイス・修正を行う際注目すべき点
 ・誤字脱字がないか
 ・後に提示する、いい文章に近い文体になっているか
 ・読み手を惹きつけるタイトルになっているか
@@ -35,61 +32,317 @@ $[修正した後のプレスリリースの文章]$
 ・事実をベースにしつつも、共感を呼ぶ内容になっているか。
 ・メディアとの窓口として、必ず記載されているか（機会損失を防ぐため）。
 社会背景や課題、統計データ、担当者コメント、今後の展望などが盛り込まれているか。
-#文章を出力する前に見直して欲しい点
-・内容を収める箱は必ず$[で始まり]$で終わること。
-・$[]$の外には何も書いてはならない。
-・改行があったとしても、新たに$[]$を作らなくて良い
-・$[]$の数は2つのみである
+# 文章を出力する前に見直して欲しい点
+・内容を収める箱は必ず<review>で始まり</review>で終わること。
+・<review></review>の外には何も書いてはならない。
+・改行があったとしても、新たに<review></review>を作らなくて良い
+・<review></review>の数は2つのみである
+・<review></review>の形式については、絶対に厳密に指定を守ってください
 ・プレスリリースの文章はhtml形式で出力すること
 ・元のhtmlの構造に近いものを出力すること
 ・元のhtmlの構造に近づけることを絶対に優先すること
 ・完全なhtmlを作ろうとするあまり元のhtmlの構造を崩すことは絶対に許されない
-これを破るとエラーになるので絶対に！守ってください
-#タイトルに特に含まれているべき要素${important_aspects}
-#定義
-今から出てくる文章は、類似の記事で非常に人気がある記事であるので、それをいい文章とみなし、これに近い文体のプレスリリースを作ることを目指すべきである。
+・ユーザが与えたプレスリリースの修正のみが仕事であり、勝手に情報を加えることは許されない
+・#レスポンスの例、#人気プレスリリースの例に出てくるプレスはユーザの入力ではないので混同しないこと
+・修正するべきなのはユーザの与えたプレスリリースのみである
+# タイトルに特に含まれているべき要素${important_aspects}
+# 人気プレスリリースの例
 ${popular_presses}
 #レスポンスの例
-$[あなたの書いたプレスリリースは非常によくできていますが、以下の点で問題があります。
-・感情的な表現が少ない・感じが多い]$
-$[<p>　株式会社アラクス（本社：名古屋市、代表取締役社長：荒川愼太郎、以下アラクス）は、2020年の花粉シーズンに向け、花粉を徹底ガードする伸縮性ポリウレタン素材マス
-「PITTA MASK」のポップアップストア「TRY! PITTA 2020　&ndash; TOKYO Pop up Store -」を、2020年2月14日(金)～2月24日(月・祝)の11日間、東京・表参道ヒルズにて開店いた
-します。<br />\r                                                                                                                                                 
-                                                                                                                                             +
- PITTA MASKは、機能性とファッション性を両立。全14色のカラーマスクを13種類のパッケージで展開しており、「MASK&times;FASHION」をテーマに、ファッションを選ぶようにマ
-スクを選ぶ新しいマスク文化を発信しています。<br />\r                                                                                                             
-                                                                                                                                                                 
-                                                                                                                                              +
- 大好評の昨年をさらに進化させ、今年のポップアップストアでは、「TRY PITTA！2020」をコンセプトにこれまでKidsサイズのみだったカラーのスモール、レギュラーサイズを「P
-ITTA MASKの詰めホーダイ販売」に追加。また、#PITTAMASK で体験をシェアすると「PITTA MASK」がもらえるフォトスポットもご用意しております。<br />\r                   
-                                                                                                                                                                     
-                                                                                                                                          +
- &nbsp;</p>\r                                                                                                                                                        
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                  +
- \r                                                                                                                                                                  
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                  +
- <ul>\r                                                                                                                                                              
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                  +
-         <li><strong>SHOP INFOMATION</strong></li>\r                                                                                                                 
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                  +
- </ul>\r                                                                                                                                                             
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                  +
- <strong>マスクは仕方なくつけるものから楽しく選ぶものへ。選ぶ楽しさを味わう、特別な11日間。<br />\r                                                                  
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                  +
- 店舗名称 ： 「TRY! PITTA2020 &ndash; Tokyo Pop up Store - 」</strong><br />\r                                                                                       
-                                                                                                                                                                     
-                                                                                                                                                                     
-                                                                                                                                  +
- 開催期間：2020年2月14日(金)～24日(月・祝)&nbsp; ※2月14日(金)はプレスデー、2月16日(日)、2月20日(木)は棚卸日<br />\r       ]$
+<review>あなたの書いたプレスリリースは非常によくできていますが、以下の点で問題があります。
+・感情的な表現が少ない・感じが多い</review>
+<review>
+<p id="p-iframe-image-80582-1"><span class="no-edit center" contenteditable="false" id="iframe-image-area-80582-1" style="margin-left: 145px; margin-right: 145px; width: 428px;" xx="prtimes"><img alt="" class="editor-image center" data-caption="iframe-image-caption-80582-1" data-nheight="405" data-nwidth="619" data-width="100" id="iframe-image-80582-1" src="/api/file.php?t=origin&amp;f=d40912-2-772287-0.png" style="width: 428px; height: 280px; opacity: 1;" title="" xx="prtimes" /></span></p>
+
+<p>　株式会社アラクス（本社：名古屋市、代表取締役社長：荒川愼太郎、以下アラクス）は、2020年の花粉シーズンに向け、花粉を徹底ガードする伸縮性ポリウレタン素材マスク「PITTA MASK」のポップアップストア「TRY! PITTA 2020　&ndash; TOKYO Pop up Store -」を、2020年2月14日(金)～2月24日(月・祝)の11日間、東京・表参道ヒルズにて開店いたします。<br />
+PITTA MASKは、機能性とファッション性を両立。全14色のカラーマスクを13種類のパッケージで展開しており、「MASK&times;FASHION」をテーマに、ファッションを選ぶようにマスクを選ぶ新しいマスク文化を発信しています。<br />
+大好評の昨年をさらに進化させ、今年のポップアップストアでは、「TRY PITTA！2020」をコンセプトにこれまでKidsサイズのみだったカラーのスモール、レギュラーサイズを「PITTA MASKの詰めホーダイ販売」に追加。また、#PITTAMASK で体験をシェアすると「PITTA MASK」がもらえるフォトスポットもご用意しております。<br />
+&nbsp;</p>
+
+<ul>
+	<li><strong>SHOP INFOMATION</strong></li>
+</ul>
+<strong>マスクは仕方なくつけるものから楽しく選ぶものへ。選ぶ楽しさを味わう、特別な11日間。<br />
+店舗名称 ： 「TRY! PITTA2020 &ndash; Tokyo Pop up Store - 」</strong><br />
+開催期間：2020年2月14日(金)～24日(月・祝)&nbsp; ※2月14日(金)はプレスデー、2月16日(日)、2月20日(木)は棚卸日<br />
+営業時間：11:00～21:00(通常営業日)&nbsp; ※13:30-21:00(プレスデー)、11:00-20:00(棚卸日)<br />
+店舗住所 ： 東京都渋谷区神宮前4丁目12&minus;10 表参道ヒルズ 西館1F 表参道Rスタジオ<br />
+<br />
+※混雑状況、マスクの在庫などによって、予告なく運営内容を変更、および中止することがございます。ご了承ください。<br />
+&nbsp;
+<ul>
+	<li><strong>4つの体験</strong></li>
+</ul>
+店舗では4つの体験を通じて、PITTA MASKを知っていただきます。
+
+<p>&nbsp;</p>
+
+<p id="p-iframe-image-80582-5"><span class="no-edit floatright" contenteditable="false" id="iframe-image-area-80582-5" style="margin-left: 29px; margin-right: 0px; width: 231px; float: right;" xx="prtimes"><img alt="" class="editor-image floatright" data-caption="iframe-image-caption-80582-5" data-nheight="217" data-nwidth="325" data-width="100" id="iframe-image-80582-5" src="/api/file.php?t=origin&amp;f=d40912-2-251290-1.jpg" style="width: 231px; height: 154px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<strong>①マネキンが迎える圧巻「フォトスポット」</strong><br />
+今年もお客様を迎えるのは、沢山のマネキンです。パワーアップしたカラフルなマスクインスタレーションは圧巻。<br />
+また、今回は「顔はめ」パネルも設置され、フォトスポットとしてもお楽しみいただけます。<br />
+<br />
+<br />
+<strong>②PITTA MASK プレゼント</strong><br />
+「#PITTAMASK」でSNSへの投稿をお約束いただける方には、あなたのファッションにピッタリな撮影用PITTA MASKを1枚プレゼント！全14色の中からお好きなカラー&times;サイズのマスクを選ぶことができます。<br />
+&nbsp;
+<p id="p-iframe-image-80582-6"><span class="no-edit floatright" contenteditable="false" id="iframe-image-area-80582-6" style="margin-left: 29px; margin-right: 0px; width: 229px; float: right;" xx="prtimes"><img alt="" class="editor-image floatright" data-caption="iframe-image-caption-80582-6" data-nheight="193" data-nwidth="342" data-width="100" id="iframe-image-80582-6" src="/api/file.php?t=origin&amp;f=d40912-2-279607-2.jpg" style="width: 229px; height: 129px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<strong>③PITTA MASK ワンコイン詰めホーダイ！</strong><br />
+毎日120名様限定で、オリジナルポーチにPITTA MASKを詰めホーダイ！今年は待望のキッズ限定カラー5色（ピンク・イエロー・サックスブルー・ブルー・イエローグリーン/スモール・レギュラーサイズ）も登場。PITTA MASKの全ラインアップ（全色全サイズ）が揃う、特別な体験ができます。好きなカラー、好きなサイズを選んで、あなただけの特別な組み合わせを作ってみてはいかがでしょうか。<br />
+<br />
+※状況により、サイズとカラーの提供数に制限を設けさせていただく可能性がございます。<br />
+※1日120名様限定（1日3回制）<br />
+※お一人さま1回限りとさせていただきます。<br />
+※料金が500円（税込）発生いたします。（オリジナルポーチ付き）<br />
+※10:30より整理券をお配りいたします。先頭にお並び頂いた方から順番に「11時回」「12時回」「13時回」（各40名）をお配りし、計120名様分配布した時点で、受付は終了とさせていただきます。<br />
+※開始時間30分後までに店頭までお越しいただけなかった場合、キャンセルとさせていただきます。<br />
+<u>※14日（金）のみ営業時間が異なるため、13:30より整理券を配布いたします。以降、先頭から14時回、15時回、16時回（各40名）となります。</u>
+
+<p>&nbsp;</p>
+<strong>④Introduce PITTA MASK</strong>
+
+<p id="p-iframe-image-80582-9"><span class="no-edit floatright" contenteditable="false" id="iframe-image-area-80582-9" style="margin-left: 29px; margin-right: 0px; width: 198px; float: right;" xx="prtimes"><img alt="" class="editor-image floatright" data-caption="iframe-image-caption-80582-9" data-nheight="203" data-nwidth="305" data-width="100" id="iframe-image-80582-9" src="/api/file.php?t=origin&amp;f=d40912-2-759344-3.jpg" style="width: 198px; height: 131px; opacity: 1;" title="" xx="prtimes" /></span></p>
+PITTA MASKは、ガーゼでも不織布でもなく、<br />
+花粉をカットするのに最適な加工を施した、特殊な伸縮性ポリウレタン素材を採用しています。今回は、実際にその素材に触れることができます。<br />
+また、PITTA MASKは、花粉を99%カットしながらも圧倒的な通気性を実現しています。さらに、耳掛け部分の形状などから耳が痛くならない、メガネが曇りにくい、UVカット率が高いなど、さまざまなメリットがあります。<br />
+この度公式Webサイトもフルリニューアル。PITTA MASKとファッションをコーディネートしたルックブックや優れた性能などを掲載しております。ぜひご覧ください。<br />
+&nbsp;
+<ul>
+	<li><strong>製品概要</strong></li>
+</ul>
+<strong>「PITTA MASK（ピッタマスク）」</strong><br />
+2014年度「グッドデザイン・ベスト100」に選出され、グッドデザイン特別賞（グッドデザイン・ものづくりデザイン賞）を受賞。<br />
+2019年度「グッドデザイン賞」を受賞。<br />
+現在、全13種類を発売中（レギュラー/スモール/キッズ）。<br />
+<br />
+◆レギュラー
+<p id="p-iframe-image-80582-10"><span class="no-edit alignleft" contenteditable="false" id="iframe-image-area-80582-10" style="margin-left: 0px; margin-right: 223px; width: 495px; float: none;" xx="prtimes"><img alt="" class="editor-image alignleft" data-caption="iframe-image-caption-80582-10" data-nheight="169" data-nwidth="616" data-width="100" id="iframe-image-80582-10" src="/api/file.php?t=origin&amp;f=d40912-2-632896-4.png" style="width: 495px; height: 135px; opacity: 1;" title="" xx="prtimes" /></span></p>
+◆スモール
+
+<p id="p-iframe-image-80582-11"><span class="no-edit alignleft" contenteditable="false" id="iframe-image-area-80582-11" style="margin-left: 0px; margin-right: 420px; width: 298px; float: none;" xx="prtimes"><img alt="" class="editor-image alignleft" data-caption="iframe-image-caption-80582-11" data-nheight="159" data-nwidth="388" data-width="100" id="iframe-image-80582-11" src="/api/file.php?t=origin&amp;f=d40912-2-952736-5.png" style="width: 298px; height: 122px; opacity: 1;" title="" xx="prtimes" /></span></p>
+◆キッズ
+
+<p id="p-iframe-image-80582-12"><span class="no-edit alignleft" contenteditable="false" id="iframe-image-area-80582-12" style="margin-left: 0px; margin-right: 502px; width: 216px; float: none;" xx="prtimes"><img alt="" class="editor-image alignleft" data-caption="iframe-image-caption-80582-12" data-nheight="148" data-nwidth="283" data-width="100" id="iframe-image-80582-12" src="/api/file.php?t=origin&amp;f=d40912-2-861592-6.png" style="width: 216px; height: 112px; opacity: 1;" title="" xx="prtimes" /></span></p>
+
+<p><br />
+&nbsp;</p>
+<strong>【製品特徴】</strong><br />
+■新ポリウレタン素材をポーラスフィルター技術によって立体網目構造にすることで、花粉を99%カット※するフィルター性能でありながら、通気性が高く息がしやすい。<br />
+■柔らかい伸縮性のあるポリウレタン素材なので、顔に密着して花粉が侵入する隙間をつくらないのに、長時間着けても耳が痛くならない優しい着け心地。<br />
+■3回洗ってもフィルター性能は花粉99%カット※を保ち経済的。<br />
+■花粉だけでなく、気になる紫外線もカットする。<br />
+※(一財)カケンテストセンター調べ<br />
+<br />
+<strong>【製品開発背景】</strong><br />
+花粉症の方を対象にしたインターネット調査(2013年7月調査、アラクス調べ)によると、花粉症でマスクを使用する方のうち約80%がマスクによる花粉対策が不十分であると感じており、花粉用マスクの機能として重視するのは「顔にフィットする(顔に密着する)」、「呼吸がしやすい」「花粉を通しにくい素材である」であることがわかりました。また、花粉飛散時期に花粉症の対策としてマスクを着用する皆様からの「マスク姿はダサいものだから、花粉シーズンのおしゃれはあきらめている」という声にお応えして、その日のファッションやスポーツ・レジャーなどの使用シーンによって使い分けができるように、「PITTA MASK」のカラーバリエーションを追加発売いたしました。<br />
+<br />
+<strong>【製品ラインアップ】</strong><br />
+PITTA MASKは、洋服を選ぶときのように、もっとマスクを楽しんでほしいというコンセプトのもと、「MASK&times;FASHION」という提案をかかげ、2014年11月に「GRAY（グレー）」を、2017年11月には「LIGHT GRAY（ライトグレー）」 と、キッズサイズの3色アソートモデル「KIDS COOL（キッズクール）」「KIDS SWEET（キッズスイート）」を発売いたしました。<br />
+2018年10月には、新たなカラーバリエーションとして「NAVY（ネイビー）」と「KHAKI（カーキ）」の2アイテム、3色アソートモデル「SMALL PASTEL（スモールパステル）」「SMALL CHIC（スモールシック）」の2アイテムを発売。さらに2019年10月に、3色アソートモデル「SMALL MODE（スモールモード）」、3色アソートモデル 「SMALL PASTEL」のレギュラーサイズ「PASTEL」、キッズサイズの 「KIDS WHITE（キッズホワイト）」を発売いたしました。<br />
+<br />
+<br />
+<strong>◆レギュラー</strong>
+
+<p id="p-iframe-image-80582-14"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-14" style="margin-left: 0px; margin-right: 29px; width: 115px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-14" data-nheight="591" data-nwidth="334" data-width="100" id="iframe-image-80582-14" src="/api/file.php?t=origin&amp;f=d40912-2-112488-7.jpg" style="width: 115px; height: 203px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK PASTEL<br />
+入数：3 枚3 色入（個包装）<br />
+カラー：サーモンピンク、ラベンダー、ベイビーピンク<br />
+紫外線遮蔽率/紫外線保護係数の格付け：サーモンピンク87％/20<br />
+ラベンダー85％/20　ベイビーピンク83％/20<br />
+小売価格：オープン価格<br />
+<br />
+<br />
+&nbsp;
+<p id="p-iframe-image-80582-15"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-15" style="margin-left: 0px; margin-right: 29px; width: 115px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-15" data-nheight="1358" data-nwidth="768" data-width="100" id="iframe-image-80582-15" src="/api/file.php?t=origin&amp;f=d40912-2-134048-8.jpg" style="width: 115px; height: 203px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK NAVY<br />
+入数：3 枚入（個包装）<br />
+カラー：ネイビー<br />
+紫外線遮蔽率：97％<br />
+紫外線保護係数の格付け：50<br />
+小売価格：オープン価格<br />
+<br />
+<br />
+&nbsp;
+<p id="p-iframe-image-80582-16"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-16" style="margin-left: 0px; margin-right: 29px; width: 115px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-16" data-nheight="1358" data-nwidth="768" data-width="100" id="iframe-image-80582-16" src="/api/file.php?t=origin&amp;f=d40912-2-493648-9.jpg" style="width: 115px; height: 203px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK KHAKI<br />
+入数：3 枚入（個包装）<br />
+カラー：カーキ<br />
+紫外線遮蔽率：98％<br />
+紫外線保護係数の格付け：50+<br />
+小売価格：オープン価格<br />
+<br />
+<br />
+&nbsp;
+<p id="p-iframe-image-80582-17"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-17" style="margin-left: 0px; margin-right: 29px; width: 115px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-17" data-nheight="590" data-nwidth="334" data-width="100" id="iframe-image-80582-17" src="/api/file.php?t=origin&amp;f=d40912-2-711378-10.jpg" style="width: 115px; height: 203px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK<br />
+入数：3 枚入（個包装）<br />
+カラー：ホワイト<br />
+紫外線遮蔽率：82％<br />
+紫外線保護係数の格付け：15<br />
+メーカー希望価格：474円（税込521円）<br />
+<br />
+<br />
+&nbsp;
+<p id="p-iframe-image-80582-18"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-18" style="margin-left: 0px; margin-right: 29px; width: 115px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-18" data-nheight="590" data-nwidth="334" data-width="100" id="iframe-image-80582-18" src="/api/file.php?t=origin&amp;f=d40912-2-343529-11.jpg" style="width: 115px; height: 203px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK GRAY<br />
+入数：3 枚入（個包装）<br />
+カラー：グレー<br />
+紫外線遮蔽率：98％<br />
+紫外線保護係数の格付け：50+<br />
+メーカー希望価格：474円（税込521円）<br />
+<br />
+<br />
+&nbsp;
+<p id="p-iframe-image-80582-19"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-19" style="margin-left: 0px; margin-right: 29px; width: 115px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-19" data-nheight="590" data-nwidth="334" data-width="100" id="iframe-image-80582-19" src="/api/file.php?t=origin&amp;f=d40912-2-754686-12.jpg" style="width: 115px; height: 203px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK LIGHT GRAY<br />
+入数：3 枚入（個包装）<br />
+カラー：ライトグレー<br />
+紫外線遮蔽率：89％<br />
+紫外線保護係数の格付け：20<br />
+小売価格：オープン価格<br />
+<br />
+<br />
+<br />
+<strong>◆スモール</strong>
+
+<p id="p-iframe-image-80582-20"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-20" style="margin-left: 0px; margin-right: 29px; width: 105px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-20" data-nheight="591" data-nwidth="334" data-width="100" id="iframe-image-80582-20" src="/api/file.php?t=origin&amp;f=d40912-2-999373-13.jpg" style="width: 105px; height: 185px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK SMALL MODE<br />
+入数：3 枚3 色入（個包装）<br />
+カラー：カーキ、グレー、ネイビー<br />
+紫外線遮蔽率/紫外線保護係数の格付け：カーキ98％/50＋ グレー98％/50＋<br />
+ネイビー97％/50<br />
+小売価格：オープン価格<br />
+<br />
+&nbsp;
+<p id="p-iframe-image-80582-21"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-21" style="margin-left: 0px; margin-right: 29px; width: 105px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-21" data-nheight="1358" data-nwidth="768" data-width="100" id="iframe-image-80582-21" src="/api/file.php?t=origin&amp;f=d40912-2-478442-14.jpg" style="width: 105px; height: 185px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK SMALL PASTEL<br />
+入数：3 枚3 色入（個包装）<br />
+カラー：サーモンピンク、ラベンダー、ベイビーピンク<br />
+紫外線遮蔽率/紫外線保護係数の格付け：サーモンピンク87％/20<br />
+ラベンダー85％/20　ベイビーピンク83％/20<br />
+小売価格：オープン価格<br />
+<br />
+&nbsp;
+<p id="p-iframe-image-80582-22"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-22" style="margin-left: 0px; margin-right: 29px; width: 105px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-22" data-nheight="1358" data-nwidth="768" data-width="100" id="iframe-image-80582-22" src="/api/file.php?t=origin&amp;f=d40912-2-282965-15.jpg" style="width: 105px; height: 185px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK SMALL CHIC<br />
+入数：3 枚3 色入（個包装）<br />
+カラー：ライトグレー、ホワイト、ソフトベージュ<br />
+紫外線遮蔽率/紫外線保護係数の格付け：ライトグレー89％/20<br />
+ホワイト82％/15　ソフトベージュ87％/20<br />
+小売価格：オープン価格<br />
+<br />
+&nbsp;
+<p id="p-iframe-image-80582-23"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-23" style="margin-left: 0px; margin-right: 29px; width: 105px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-23" data-nheight="590" data-nwidth="334" data-width="100" id="iframe-image-80582-23" src="/api/file.php?t=origin&amp;f=d40912-2-635807-16.jpg" style="width: 105px; height: 185px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK SMALL<br />
+入数：3 枚入（個包装）<br />
+カラー：ホワイト<br />
+紫外線遮蔽率：82％<br />
+紫外線保護係数の格付け：15<br />
+メーカー希望価格：474円（税込521円）<br />
+<br />
+<br />
+<strong>◆キッズ</strong>
+
+<p id="p-iframe-image-80582-25"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-25" style="margin-left: 0px; margin-right: 29px; width: 100px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-25" data-nheight="539" data-nwidth="334" data-width="100" id="iframe-image-80582-25" src="/api/file.php?t=origin&amp;f=d40912-2-662488-17.jpg" style="width: 100px; height: 161px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK KIDS WHITE<br />
+入数：3 枚入（個包装）<br />
+カラー：ホワイト<br />
+紫外線遮蔽率：82％<br />
+紫外線保護係数の格付け：15<br />
+小売価格：オープン価格<br />
+&nbsp;
+<p id="p-iframe-image-80582-26"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-26" style="margin-left: 0px; margin-right: 29px; width: 100px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-26" data-nheight="539" data-nwidth="334" data-width="100" id="iframe-image-80582-26" src="/api/file.php?t=origin&amp;f=d40912-2-780040-18.jpg" style="width: 100px; height: 161px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK KIDS COOL<br />
+入数：3 枚3 色入（個包装）<br />
+カラー：ブルー、グレー、イエローグリーン<br />
+紫外線遮蔽率/ 紫外線保護係数の格付け：ブルー 93％/35　グレー 98％/50+<br />
+イエローグリーン 92％/25<br />
+小売価格：オープン価格<br />
+&nbsp;
+<p id="p-iframe-image-80582-27"><span class="no-edit floatleft" contenteditable="false" id="iframe-image-area-80582-27" style="margin-left: 0px; margin-right: 29px; width: 100px; float: left;" xx="prtimes"><img alt="" class="editor-image floatleft" data-caption="iframe-image-caption-80582-27" data-nheight="539" data-nwidth="334" data-width="100" id="iframe-image-80582-27" src="/api/file.php?t=origin&amp;f=d40912-2-488700-19.jpg" style="width: 100px; height: 161px; opacity: 1;" title="" xx="prtimes" /></span></p>
+<br />
+品名：PITTA MASK KIDS SWEET<br />
+入数：3 枚3 色入（個包装）<br />
+カラー：ピンク、イエロー、サックスブルー<br />
+紫外線遮蔽率/ 紫外線保護係数の格付け：ピンク 82％/15　イエロー 86％/15　<br />
+サックスブルー 88％/20<br />
+小売価格：オープン価格<br />
+<br />
+＜製品に関する問い合わせ先＞<br />
+アラクス　マスク相談室　　<br />
+TEL：052-951-8880　　受付：9：00～16：30（土・日・祝日を除く）<br />
+&nbsp;
+<ul>
+	<li><strong>イベント開催概要</strong></li>
+</ul>
+<strong>「TRY! PITTA 2020　- OSAKA Beauty Lounge -」</strong><br />
+営業期間 ： 2019年2月12日(水)～18日(火)<br />
+営業時間 ： 月～日 10:00～20:30／金・土 10:00～21:00<br />
+店舗住所 ： 大阪府大阪市北区梅田3丁目1-1サウスゲートビルディング2階化粧品フロア<br />
+<br />
+<strong>①「PITTA MASK &times; アイメイク」スペシャルコラボ体験</strong><br />
+大丸梅田店 2 階の人気コスメブランドとコラボレーション。<br />
+目元メイクとマスクを組み合わせて選ぶ・楽しむ新しい体験の場を提供いたします。<br />
+※コラボブランド：「JILLSTUART」「BOBBI BROWN」「DECORTE」「LUNASOL」<br />
+<br />
+<strong>②コスメブランドコラボレーション</strong><br />
+大丸梅田店２階にある対象コスメブランドの商品をご購入いただいた方には、PITTA MASK２枚との引換券をプレゼントいたします。※上記4ブランド含む、計12ブランド<br />
+<br />
+<strong>③PITTA MASK バイキング</strong><br />
+毎日100名様（web予約制）限定で、バイキングにようにPITTA MASKを10枚お詰めいただけます。9色のマスクの中から、好きなカラー、好きなサイズを選んで、あなただけの特別な組み合わせを作ることができます。<br />
+※1日100名様限定web予約制（右記よりご予約くださいませ。）<br />
+※お一人さま1回限りとさせていただきます。<br />
+※料金が500円（税込）発生いたします。<br />
+※オリジナルポーチ付き<br />
+※キッズサイズを除く<br />
+<br />
+<strong>④SNS 投稿にてマスクプレゼント</strong><br />
+大丸梅田店だけでしか体験できない「Beauty Lounge」で、店内装飾や体験風景を撮影いただけます。<br />
+「♯PITTA MASK」 を付けてSNSに投稿いただくと、PITTA MASK を１枚プレゼントいたします。<br />
+※混雑状況、マスクの在庫などによって、予告なく運営内容を変更、および中止することがございます。ご了承ください。<br />
+<br />
+▼予約はこちら<br />
+https://select-type.com/rsv/?id=gY3HOm12adw&amp;c_id=77793&amp;w_flg=1&nbsp;<br />
+<br />
+<br />
+<strong>「TRY! PITTA 2020　- NAGOYA Fitting Lounge -」</strong><br />
+営業期間 ： 2019年2月14日（金）～16日（日）<br />
+営業時間 ： (金)09：00～20:00／(土・日) 10：00～20：00<br />
+店舗住所 ： 愛知県名古屋市中村区名駅１丁目１－３JRゲートタワー１階 イベントスペース<br />
+<br />
+<strong>①Fitting Lounge体験スペース</strong><br />
+東名阪開催地で最大規模のPITTA MASK試着スペースが登場。<br />
+その日のコーディネートや気分に合わせ、自分に合うカラー・サイズのPITTA MASKを試着体験できます。全9ラインアップのマスクの中から、お気に入りの1枚をプレゼント。今年は待望のキッズ限定カラー5色（ピンク・イエロー・サックスブルー・ブルー・イエローグリーン/スモール・レギュラーサイズ）も登場。特設のフィッティングミラーの前でお好みのPITTA MASKを楽しめます。<br />
+<br />
+<strong>②PITTA MASK プレゼント</strong><br />
+イベントスペースにお越しいただいたお客様にスモールまたはレギュラーサイズのPITTA MASKをプレゼント（色はランダムです）。その場でPITTA MASKをご体験いただけます。<br />
+※混雑状況、マスクの在庫などによって、予告なく運営内容を変更、および中止することがございます。ご了承ください。<br />
+&nbsp;
+<ul>
+	<li><strong>イベント開催にあたって</strong></li>
+</ul>
+昨今、新型コロナウイルス、インフルエンザやかぜ予防などにより、マスクの需要が急速に高まるなか、各種マスクの品切れが続いています。<br />
+<br />
+マスクは感染（侵入）を完全に防ぐものではありませんが、飛沫予防、エチケットとして大切なアイテムです。<br />
+<br />
+「花粉や風邪対策そして、エチケットとしてマスクを使う多くの方々に、楽しくマスクを着用してほしい。」<br />
+<br />
+そんな想いから株式会社アラクスは、この状況下でのTRY!PITTA 2020の実施、多くの方にマスクをプレゼントする事を決定致しました。<br />
+&nbsp;
+</review>
+# 注意
+・#レスポンスの例に出てくる文章はあくまで例であり、ユーザの入力ではないので、ユーザの入力についてのみレビュー、修正を行うこと
+・あなたの返答は</review>で終わっていることを確認してください
+・閉じタグを勝手に修正してはいけません。例えば元の文章が `<h1>タイトル</h1><p>本文</p>` であれば、修正後も `<h1>` と `<p>` はそのまま残すようにしてください。

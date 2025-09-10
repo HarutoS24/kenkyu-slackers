@@ -243,33 +243,42 @@ func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responseFromGPT, err := sendRequestToGPT(input)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("GPTリクエスト失敗: %v", err), http.StatusInternalServerError)
-		return
-	}
-	re := regexp.MustCompile(`(?s)\$\[(.*?)\]\$`)
-
-	matches := re.FindAllStringSubmatch(responseFromGPT.Choices[0].Message.Content, -1)
-
-	fmt.Println(responseFromGPT.Choices[0].Message.Content)
 	var response Response
+	const maxRetries = 3
 
-	if len(matches) >= 2 && len(matches[0]) >= 2 && len(matches[1]) >= 2 {
-		response.Advice = matches[0][1]
-
-		markdown, err := md.ConvertString(matches[1][1])
+	for attempt := 1; attempt <= maxRetries; attempt++ {
+		responseFromGPT, err := sendRequestToGPT(input)
 		if err != nil {
-			http.Error(w, "md形式のテキストの生成に失敗しました", http.StatusInternalServerError)
+			http.Error(w, fmt.Sprintf("GPTリクエスト失敗: %v", err), http.StatusInternalServerError)
 			return
 		}
-		response.ImprovedPress = markdown
-	} else {
-		http.Error(w, "正しい形式のマッチが見つかりませんでした", http.StatusBadRequest)
-		return
+
+		re := regexp.MustCompile(`(?s)\</?review\>(.*?)\</?review\>`)
+		matches := re.FindAllStringSubmatch(responseFromGPT.Choices[0].Message.Content, -1)
+
+		fmt.Println("GPT Response:", responseFromGPT.Choices[0].Message.Content)
+
+		if len(matches) >= 2 && len(matches[0]) >= 2 && len(matches[1]) >= 2 {
+			response.Advice = matches[0][1]
+
+			markdown, err := md.ConvertString(matches[1][1])
+			if err != nil {
+				http.Error(w, "md形式のテキストの生成に失敗しました", http.StatusInternalServerError)
+				return
+			}
+			response.ImprovedPress = markdown
+			respondJSON(w, response)
+			return
+		} else if len(matches) == 1 {
+			response.Advice = matches[0][1]
+			respondJSON(w, response)
+			return
+		}
+
+		fmt.Printf("Attempt %d: 正しい形式のマッチが見つかりませんでした。再試行します。\n", attempt)
 	}
 
-	respondJSON(w, response)
+	http.Error(w, "正しい形式のマッチが見つかりませんでした（最大再試行回数に到達）", http.StatusBadRequest)
 }
 
 func checkApiRequest(w http.ResponseWriter, r *http.Request) {
@@ -379,7 +388,7 @@ func sendRequestToGPT(input Input) (ResponseFromGPT, error) {
 
 	reqBody := RequestToGPT{
 		Model:    modelName,
-		Messages: []Message{{Role: "system", Content: fullText}, {Role: "user", Content: "私は以下のようなプレスリリースを書きました。このプレスリリースを改善することには私の人生がかかっています。\n" + input.Text}},
+		Messages: []Message{{Role: "system", Content: fullText}, {Role: "user", Content: "私は以下のようなプレスリリースを書きました。今から私が提示するプレスリリースを改善してください。\n#私のプレスリリース:\n" + input.Text}},
 	}
 
 	jsonData, err := json.Marshal(reqBody)
