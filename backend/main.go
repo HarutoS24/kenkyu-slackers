@@ -270,10 +270,6 @@ func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 			response.ImprovedPress = markdown
 			respondJSON(w, response)
 			return
-		} else if len(matches) == 1 {
-			response.Advice = matches[0][1]
-			respondJSON(w, response)
-			return
 		}
 
 		fmt.Printf("Attempt %d: 正しい形式のマッチが見つかりませんでした。再試行します。\n", attempt)
