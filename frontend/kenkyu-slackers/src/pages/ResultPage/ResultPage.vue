@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { getFeedbackFromGPT } from '@/pages/ResultPage/api-call';
+  import MarkdownRenderer from '@/components/MarkdownRenderer.vue';
+import { getFeedbackFromGPT } from '@/pages/ResultPage/api-call';
   import { useReviewContentStore } from '@/stores/review-content';
   import { storeToRefs } from 'pinia';
   import { ref } from 'vue';
@@ -32,10 +33,23 @@
 </script>
 
 <template>
-  【アドバイス】
-  {{ advice }}
-  【修正後】
-  {{ improvedContent }}
+  <el-form>
+    <el-form-item label="アドバイス" label-position="top">
+      {{ advice }}
+    </el-form-item>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <el-form-item label="オリジナル" label-position="top">
+          <markdown-renderer :source="markdownContent" style="height: 50vh" />
+        </el-form-item>
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="修正例" label-position="top">
+          <markdown-renderer :source="improvedContent" style="height: 50vh" />
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-form>
 </template>
 
 <style scoped>

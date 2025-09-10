@@ -18,7 +18,6 @@
 <style scoped>
   .md-renderer-container {
     width: 100%;
-    height: 50vh;
     overflow-y: scroll;
   }
 

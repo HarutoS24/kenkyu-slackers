@@ -21,6 +21,7 @@ declare module 'vue' {
     ElOption: typeof import('element-plus/es')['ElOption']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSelect: typeof import('element-plus/es')['ElSelect']
+    MarkdownRenderer: typeof import('./src/components/MarkdownRenderer.vue')['default']
     ModalWindow: typeof import('./src/components/ModalWindow.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
