@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import axios, { AxiosError } from 'axios'
-import { ref } from 'vue';
+import axios, { AxiosError } from "axios";
+import { ref } from "vue";
 
   const hoge = () => {
     window.alert("Hoge!");
@@ -15,6 +15,7 @@ import { ref } from 'vue';
       result.value = `${res.status}`;
     });
   }
+  const group = ref<string[]>([]);
 </script>
 
 <template>
@@ -22,6 +23,11 @@ import { ref } from 'vue';
   <el-input v-model="method"/>
   <el-button @click="post">Post</el-button>
   <el-input v-model="result" disabled/>
+  <el-checkbox-group v-model="group">
+    <el-checkbox value="a">a</el-checkbox>
+    <el-checkbox value="b">b</el-checkbox>
+  </el-checkbox-group>
+  {{ group }}
 </template>
 
 <style scoped></style>

@@ -1,79 +1,70 @@
 <script setup lang="ts">
-  import type { ReviewCustomizeOption } from "@/pages/AppRoot/types";
-  import OptionSelector from "./OptionSelector.vue"
-  import { onMounted, ref } from "vue";
+  import { computed, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
+  import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
+  import OptionModal from "@/pages/AppRoot/OptionModal.vue";
+  import router from "@/router";
+  import { useReviewContentStore } from "@/stores/review-content";
+  import { storeToRefs } from "pinia";
 
-  const getOptions = (optionType: string): ReviewCustomizeOption => {
-    // TODO: 本番実装置き換え
-    return {
-      1: {
-        value: `${optionType}-value1`,
-        label: `${optionType}-label1`,
-      },
-      2: {
-        value: `${optionType}-value2`,
-        label: `${optionType}-label2`,
-      },
-      3: {
-        value: `${optionType}-value3`,
-        label: `${optionType}-label3`,
-      },
+  const markdownContentStore = useReviewContentStore();
+  const { markdownContent, industryIds, importantAspects } = storeToRefs(markdownContentStore);
+
+  const industryLabels = ref<string[]>([]);
+  const setIndustryLabels = (v: string[]) => industryLabels.value = v;
+  const industryLabelString = computed(() => {
+    return industryLabels.value[0];
+  });
+
+  const aspectLabels = ref<string[]>([]);
+  const setAspectLabels = (v: string[]) => aspectLabels.value = v;
+  const aspectLabelString = computed(() => {
+    if (aspectLabels.value.length === 0) {
+      return "未選択"
     }
+    else {
+      return aspectLabels.value.join(", ");
+    }
+  });
+
+  const onSubmit = async () => {
+    router.push("/result");
   }
-
-  const hogeOptions = ref<ReviewCustomizeOption>({});
-  const fugaOptions = ref<ReviewCustomizeOption>({});
-  const hogeValue = ref("");
-  const fugaValue = ref("");
-  const markdownContent = ref("");
-  onMounted(() => {
-    hogeOptions.value = getOptions("hoge");
-    fugaOptions.value = getOptions("fuga");
-  })
-
-  const resultSuggestion = ref("");
-  const resultAdvice = ref("");
 </script>
 
 <template>
   <div class="container">
     <el-form>
-      <el-form-item label="選択肢1">
-        <option-selector :value="hogeValue" :options="hogeOptions" />
-      </el-form-item>
-      <el-form-item label="選択肢2">
-        <option-selector :value="fugaValue" :options="fugaOptions" />
+      <el-form-item class="option-modal">
+        <option-modal
+          v-model:industry="industryIds"
+          v-model:aspect="importantAspects"
+          @set-industry-label="setIndustryLabels"
+          @set-aspect-label="setAspectLabels"
+        />
+        <div class="line"></div>
+        <div class="label">リリース概要</div>
+        <div class="value">{{ industryLabelString }}</div>
+        <div class="line"></div>
+        <div class="label">メディアフック</div>
+        <div class="value">{{ aspectLabelString }}</div>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="本文（マークダウン）" label-position="top">
-            <markdown-editor :value="markdownContent" />
+            <markdown-editor v-model="markdownContent" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="変更案" label-position="top">
-            <el-input
-              v-model="resultSuggestion"
-              type="textarea"
-              disabled
-            />
+          <el-form-item label="プレビュー" label-position="top">
+            <markdown-renderer class="md-renderer" :source="markdownContent" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-form-item>
-        <el-button type="primary">
+        <el-button type="primary" @click="onSubmit">
           送信
         </el-button>
-      </el-form-item>
-    </el-form>
-    <el-form>
-      <el-form-item label="アドバイス" label-position="top">
-        <el-input
-          v-model="resultAdvice"
-          type="textarea"
-          disabled
-        />
       </el-form-item>
     </el-form>
   </div>
@@ -81,6 +72,26 @@
 
 <style scoped>
   .container {
-    padding: 0 8vw;
+    scrollbar-color: #ccc #fff;
+  }
+
+  .option-modal :deep(.el-form-item__content) {
+    gap: 15px;
+  }
+
+  .option-modal div.label {
+    font-size: 0.66rem;
+    padding: 4px;
+    border: 1px solid #ccc;
+    line-height: 1;
+  }
+
+  .option-modal div.line {
+    height: 15px;
+    border-left: 1px solid #999;
+  }
+
+  .option-modal div.label + div.value {
+    margin-left: -8px;
   }
 </style>

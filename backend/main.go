@@ -7,13 +7,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"regexp"
 	"strings"
 
-	md "github.com/JohannesKaufmann/html-to-markdown/v2"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -429,6 +427,4 @@ func main() {
 		os.Exit(1)
 	}
 }
-
-
 
