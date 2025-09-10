@@ -12,6 +12,9 @@
       <div class="layout-main-container">
         <Suspense>
           <router-view />
+          <template #fallback>
+            レビューを作成中です
+          </template>
         </Suspense>
       </div>
     </el-main>
