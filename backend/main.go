@@ -59,12 +59,31 @@ type Press struct {
 const modelName = "gpt-4.1-nano"
 
 var aspectMap = map[string]string{
-	"0": "時流性",
-	"1": "話題性",
+	"0": "時流／話題／季節性",
+	"1": "社会／公共・公益性",
+	"2": "地域性",
+	"3": "新規／独自性",
+	"4": "最上級／希少性",
+	"5": "人物／企業名",
+	"6": "逆説／対立／意外性",
+	"7": "数字／絵",
 }
 
+var aspectMapDetail = map[string]string{
+	"0": "時流／話題／季節性: 今まさに話題になっている旬のテーマを取り入れることが効果的です。",
+	"1": "社会／公共・公益性: 社会的な意義や公共性を示すことで注目を集められます。",
+	"2": "地域性: 地域ならではの特色を打ち出すことで関心を引けます。",
+	"3": "新規／独自性: 新しさや独自性を強調すると目を惹きます。",
+	"4": "最上級／希少性: 希少性や唯一性を打ち出すことで魅力が高まります。",
+	"5": "人物／企業名: 有名人や権威ある企業名を出すと信頼性が増します。",
+	"6": "逆説／対立／意外性: 一般常識とのギャップや意外性を示すと人を惹きつけられます。",
+	"7": "数字／絵: 数字や具体的なデータを提示すると説得力が増します。",
+}
+
+// ----- Global -----
 var db *sql.DB
 
+// ----- Initialization -----
 func init() {
 	if err := godotenv.Load(); err != nil {
 		fmt.Printf("Warning: .env ファイル読み込み失敗: %v\n", err)
@@ -93,10 +112,11 @@ func initDB() {
 	}
 }
 
+// ----- Middleware -----
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		frontend_port := os.Getenv("FRONTEND_PORT")
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:"+frontend_port)
+		frontendPort := os.Getenv("FRONTEND_PORT")
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:"+frontendPort)
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -223,17 +243,28 @@ func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responseFromGPT, err := sendRequestToGPT(input)
-	re := regexp.MustCompile(`\[(.*?)\]`)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("GPTリクエスト失敗: %v", err), http.StatusInternalServerError)
+		return
+	}
+	re := regexp.MustCompile(`(?s)\$\[(.*?)\]\$`)
 
 	matches := re.FindAllStringSubmatch(responseFromGPT.Choices[0].Message.Content, -1)
 
+	fmt.Println(responseFromGPT.Choices[0].Message.Content)
 	var response Response
 
-	response.Advice = matches[0][1]
-	response.ImprovedPress = matches[1][1]
+	if len(matches) >= 2 && len(matches[0]) >= 2 && len(matches[1]) >= 2 {
+		response.Advice = matches[0][1]
 
-	if err != nil {
-		http.Error(w, fmt.Sprintf("GPTリクエスト失敗: %v", err), http.StatusInternalServerError)
+		markdown, err := md.ConvertString(matches[1][1])
+		if err != nil {
+			http.Error(w, "md形式のテキストの生成に失敗しました", http.StatusInternalServerError)
+			return
+		}
+		response.ImprovedPress = markdown
+	} else {
+		http.Error(w, "正しい形式のマッチが見つかりませんでした", http.StatusBadRequest)
 		return
 	}
 
@@ -263,6 +294,10 @@ func isRequestOK(r *http.Request) (bool, string) {
 	r.Body = io.NopCloser(&buf)
 
 	releaseTypeMap := getReleaseTypeMap()
+	if input.Text == "" {
+		return false, "テキストは入力必須です"
+	}
+
 	if _, ok := releaseTypeMap[input.ReleaseTypeId]; !ok {
 		return false, "release_type_id: 不正な値指定です"
 	}
@@ -307,7 +342,7 @@ func generateReplacedText(path string, vars map[string]interface{}) (string, err
 			case []string:
 				var aspectsStr = "\n"
 				for _, s := range v {
-					if name, ok := aspectMap[s]; ok {
+					if name, ok := aspectMapDetail[s]; ok {
 						aspectsStr += fmt.Sprintf("・%s\n", name)
 					} else {
 						aspectsStr += fmt.Sprintf("・%s\n", s)
@@ -392,3 +427,4 @@ func main() {
 		os.Exit(1)
 	}
 }
+
