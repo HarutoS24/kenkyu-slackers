@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref } from "vue";
   import MarkdownEditor from "@/pages/AppRoot/MarkdownEditor.vue";
-  import MarkdownRenderer from "@/pages/AppRoot/MarkdownRenderer.vue";
+  import MarkdownRenderer from "@/components/MarkdownRenderer.vue";
   import OptionModal from "@/pages/AppRoot/OptionModal.vue";
   import router from "@/router";
   import { useReviewContentStore } from "@/stores/review-content";
@@ -52,12 +52,12 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="本文（マークダウン）" label-position="top">
-            <markdown-editor v-model="markdownContent" />
+            <markdown-editor v-model="markdownContent"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="プレビュー" label-position="top">
-            <markdown-renderer class="md-renderer" :source="markdownContent" />
+            <markdown-renderer class="md-renderer" :source="markdownContent" style="height: 50vh;"/>
           </el-form-item>
         </el-col>
       </el-row>
