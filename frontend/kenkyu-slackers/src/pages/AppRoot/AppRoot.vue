@@ -43,7 +43,7 @@
           @set-aspect-label="setAspectLabels"
         />
         <div class="line"></div>
-        <div class="label">業種</div>
+        <div class="label">リリース概要</div>
         <div class="value">{{ industryLabelString }}</div>
         <div class="line"></div>
         <div class="label">メディアフック</div>

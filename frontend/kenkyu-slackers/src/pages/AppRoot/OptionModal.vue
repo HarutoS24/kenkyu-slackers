@@ -54,10 +54,10 @@
     <modal-window :show="showState" @close="showState = false">
       <template #body>
         <el-form>
-          <el-form-item label="業種">
+          <el-form-item label="リリース概要">
             <option-selector v-model="industryValues" :options="industryOptions" type="select" />
           </el-form-item>
-          <el-form-item label="選択肢2">
+          <el-form-item label="メディアフック">
             <option-selector v-model="aspectValues" :options="aspectOptions" type="checkbox" />
           </el-form-item>
         </el-form>
