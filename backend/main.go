@@ -248,7 +248,7 @@ func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, fmt.Sprintf("GPTリクエスト失敗: %v", err), http.StatusInternalServerError)
 		return
 	}
-	re := regexp.MustCompile(`(?s)\$\[(.*?)\]\$`)
+	re := regexp.MustCompile(`(?s)\</?review\>(.*?)\</?review\>`)
 
 	matches := re.FindAllStringSubmatch(responseFromGPT.Choices[0].Message.Content, -1)
 
@@ -264,6 +264,8 @@ func returnFeedbackFromGPT(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		response.ImprovedPress = markdown
+	} else if len(matches) == 1 {
+		response.Advice = matches[0][1]
 	} else {
 		http.Error(w, "正しい形式のマッチが見つかりませんでした", http.StatusBadRequest)
 		return
@@ -379,7 +381,7 @@ func sendRequestToGPT(input Input) (ResponseFromGPT, error) {
 
 	reqBody := RequestToGPT{
 		Model:    modelName,
-		Messages: []Message{{Role: "system", Content: fullText}, {Role: "user", Content: "私は以下のようなプレスリリースを書きました。このプレスリリースを改善することには私の人生がかかっています。\n" + input.Text}},
+		Messages: []Message{{Role: "system", Content: fullText}, {Role: "user", Content: "私は以下のようなプレスリリースを書きました。今から私が提示するプレスリリースを改善してください。\n#私のプレスリリース:\n" + input.Text}},
 	}
 
 	jsonData, err := json.Marshal(reqBody)
