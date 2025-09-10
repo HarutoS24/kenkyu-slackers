@@ -4,13 +4,7 @@ import z from "zod";
 const getIndustryIdsResponseSchema = z.record(z.string(), z.string());
 
 export const getIndustryIds = async () => {
-  return {
-    value1: "industry1",
-    value2: "industry2",
-    value3: "industry3",
-  }
-
-  const res = await getAxios().get("/industry_ids");
+  const res = await getAxios().get("/release_type");
   if (res.status === 200) {
     const result = getIndustryIdsResponseSchema.parse(res.data);
     return result;
@@ -24,14 +18,8 @@ export const getIndustryIds = async () => {
 const getAspectsResponseSchema = z.record(z.string(), z.string());
 
 export const getAspects = async () => {
-  return {
-    value1: "aspect1",
-    value2: "aspect2",
-    value3: "aspect3",
-  }
-
   // TODO: コピペなので直す
-  const res = await getAxios().get("/industry_ids");
+  const res = await getAxios().get("/aspect");
   if (res.status === 200) {
     const result = getIndustryIdsResponseSchema.parse(res.data);
     return result;

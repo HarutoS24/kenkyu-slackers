@@ -14,11 +14,11 @@
     try {
       const result = await getFeedbackFromGPT({
         text: markdownContent.value,
-        industry_id: singleIndustryId.value,
+        release_type_id: singleIndustryId.value,
         important_aspects: importantAspects.value,
       });
 
-      advice.value = result.Advice;
+      advice.value = result.advice;
       improvedContent.value = result.improved_press;
 
       return true;
@@ -32,9 +32,9 @@
 </script>
 
 <template>
-  アドバイス
+  【アドバイス】
   {{ advice }}
-  修正後
+  【修正後】
   {{ improvedContent }}
 </template>
 

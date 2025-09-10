@@ -3,23 +3,19 @@ import z from "zod";
 
 const getFeedbackFromGPTRequestSchema = z.object({
   text: z.string(),
-  industry_id: z.string(),
+  release_type_id: z.string(),
   important_aspects: z.array(z.string()),
 });
 type GetFeedbackFromGPTRequestSchema = z.infer<typeof getFeedbackFromGPTRequestSchema>;
 
 const getFeedbackFromGPTResponseSchema = z.object({
-  Advice: z.string(),
+  advice: z.string(),
   improved_press: z.string(),
 });
 
 export const getFeedbackFromGPT = async (req: GetFeedbackFromGPTRequestSchema) => {
-  return {
-    Advice: "mock advice",
-    improved_press: "mock improved press",
-  }
-
   getFeedbackFromGPTRequestSchema.parse(req);
+  console.log(req);
 
   const res = await getAxios().post("/get_feedback_from_GPT", req);
   if (res.status === 200) {
