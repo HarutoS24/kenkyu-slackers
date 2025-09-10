@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }} #Ownerに環境変数を設定してもらう
+  AWS_SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }} 
 jobs:
   ec2-access-test:
     runs-on: ubuntu-latest
@@ -35,6 +35,13 @@ jobs:
           mkdir -p ~/.ssh
           echo "$AWS_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
+      - name: Stop existing service and remove old binary
+        run: |
+          ssh -o StrictHostKeyChecking=no -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa -i ~/.ssh/id_rsa ec2-user@52.68.239.101 "
+            sudo systemctl stop kenkyu-slackers || echo 'Service not running'
+            rm -f ~/kenkyu-slackers
+          "
 
       - name: Copy files to EC2
         run: |
